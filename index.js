@@ -1,6 +1,5 @@
 const express = require('express');
 // const path = require('path');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
@@ -21,14 +20,15 @@ mongoose.connection.on('error', err => {
 
 const app = express();
 
+// Express built-in middleware that does job of body-parser
+app.use(express.urlencoded( {extended: false}));
+app.use(express.json());
+
 // Port Number
 const port = process.env.PORT || 8080;
 
 // Cors Middleware
 app.use(cors());
-
-// Body Parser middleware
-app.use(bodyParser.json());
 
 // Passport Middleware
 app.use(passport.initialize());
