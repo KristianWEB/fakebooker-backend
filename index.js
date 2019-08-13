@@ -1,5 +1,7 @@
 const express = require('express');
+const app = express();
 // const path = require('path');
+const volleyball = require('volleyball');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
@@ -18,9 +20,8 @@ mongoose.connection.on('error', err => {
   console.log('Database error ' + err);
 });
 
-const app = express();
-
-// Express built-in middleware that does job of body-parser
+// HTTP logger & Express built-in middleware that does job of body-parser.
+app.use(volleyball);
 app.use(express.urlencoded( {extended: false}));
 app.use(express.json());
 
