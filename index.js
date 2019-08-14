@@ -8,7 +8,12 @@ const mongoose = require('mongoose');
 const config = require('./config/database');
 
 // Connecting to database
-mongoose.connect(config.database, { useNewUrlParser: true });
+mongoose.connect(config.database,
+  {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+  });
 
 // On database connection
 mongoose.connection.on('connected', () => {
@@ -22,7 +27,7 @@ mongoose.connection.on('error', err => {
 
 // HTTP logger & Express built-in middleware that does job of body-parser.
 app.use(volleyball);
-app.use(express.urlencoded( {extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Port Number
