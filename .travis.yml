@@ -9,3 +9,4 @@ deploy:
   app: sidekick-fork-zihad
   on:
     repo: open-source-developers/back-end
+    all_branches: true
