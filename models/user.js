@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 // User Schema
 const UserSchema = mongoose.Schema({
@@ -11,10 +11,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  roles: { type: [String], default: ['user'] }
+  roles: { type: [String], default: ["user"] }
 });
 
-const User = (module.exports = mongoose.model('User', UserSchema));
+const User = (module.exports = mongoose.model("User", UserSchema));
 
 module.exports.getUserById = (id, callback) => User.findById(id, callback);
 
@@ -30,4 +30,5 @@ module.exports.addUser = newUser => {
   });
 };
 
-module.exports.comparePassword = (candidatePassword, hash) => bcrypt.compare(candidatePassword, hash);
+module.exports.comparePassword = (candidatePassword, hash) =>
+  bcrypt.compare(candidatePassword, hash);
