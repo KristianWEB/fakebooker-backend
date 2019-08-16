@@ -1,5 +1,7 @@
 # Backend
 
+[![Build Status](https://travis-ci.com/open-source-developers/back-end.svg?branch=master)](https://travis-ci.com/open-source-developers/back-end)
+
 This is the root repo for backend.
 
 ## Prerequisites before running
