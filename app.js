@@ -1,27 +1,28 @@
-const express = require("express");
+const express = require('express');
+
 const app = express();
-// const path = require('path');
-const volleyball = require("volleyball");
-const cors = require("cors");
-const passport = require("passport");
-const mongoose = require("mongoose");
-const config = require("./config/database");
+// Const path = require('path');
+const volleyball = require('volleyball');
+const cors = require('cors');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const config = require('./config/database');
 
 // Connecting to database
 mongoose.connect(config.database, {
-  useNewUrlParser: true,
+  useCreateIndex: true,
   useFindAndModify: false,
-  useCreateIndex: true
+  useNewUrlParser: true,
 });
 
 // On database connection
-mongoose.connection.on("connected", () => {
-  console.log("Connected to database " + config.database);
+mongoose.connection.on('connected', () => {
+  console.log(`Connected to database ${config.database}`);
 });
 
 // On database error
-mongoose.connection.on("error", err => {
-  console.log("Database error " + err);
+mongoose.connection.on('error', (err) => {
+  console.log(`Database error ${err}`);
 });
 
 // HTTP logger & Express built-in middleware that does job of body-parser.
@@ -35,17 +36,18 @@ app.use(cors());
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
-require("./config/passport")(passport);
+require('./config/passport')(passport);
 
-const auth = require("./routes/auth");
-app.use("/api/auth", auth);
+const auth = require('./routes/auth');
 
-app.get("/test", (req, res) => {
-  res.send({ data: "hello from test endpoint" });
+app.use('/api/auth', auth);
+
+app.get('/test', (req, res) => {
+  res.send({ data: 'hello from test endpoint' });
 });
 
-app.get("*", (req, res) => {
-  res.send("Invalid Endpoint");
+app.get('*', (req, res) => {
+  res.send('Invalid Endpoint');
   res.end();
 });
 
