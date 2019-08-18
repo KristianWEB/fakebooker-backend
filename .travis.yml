@@ -1,7 +1,10 @@
 language: node_js
 node_js: node
 services:
-- mongodb
+  - mongodb
+script:
+  - npm run lint
+  - npm test
 deploy:
   provider: heroku
   api_key:
