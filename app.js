@@ -1,27 +1,27 @@
-const express = require('express');
+const express = require("express");
 
 const app = express();
 // Const path = require('path');
-const volleyball = require('volleyball');
-const cors = require('cors');
-const passport = require('passport');
-const mongoose = require('mongoose');
-const config = require('./config/database');
+const volleyball = require("volleyball");
+const cors = require("cors");
+const passport = require("passport");
+const mongoose = require("mongoose");
+const config = require("./config/database");
 
 // Connecting to database
 mongoose.connect(config.database, {
   useCreateIndex: true,
   useFindAndModify: false,
-  useNewUrlParser: true,
+  useNewUrlParser: true
 });
 
 // On database connection
-mongoose.connection.on('connected', () => {
+mongoose.connection.on("connected", () => {
   console.log(`Connected to database ${config.database}`);
 });
 
 // On database error
-mongoose.connection.on('error', (err) => {
+mongoose.connection.on("error", err => {
   console.log(`Database error ${err}`);
 });
 
@@ -36,18 +36,18 @@ app.use(cors());
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
-require('./config/passport')(passport);
+require("./config/passport")(passport);
 
-const auth = require('./routes/auth');
+const auth = require("./routes/auth");
 
-app.use('/api/auth', auth);
+app.use("/api/auth", auth);
 
-app.get('/test', (req, res) => {
-  res.send({ data: 'hello from test endpoint' });
+app.get("/test", (req, res) => {
+  res.send({ data: "hello from test endpoint" });
 });
 
-app.get('*', (req, res) => {
-  res.send('Invalid Endpoint');
+app.get("*", (req, res) => {
+  res.send("Invalid Endpoint");
   res.end();
 });
 
