@@ -4,5 +4,5 @@ const databaseURL =
 module.exports = {
   database: databaseURL,
   // Needed for passportjs
-  secret: "yoursecret"
+  secret: "yoursecret",
 };

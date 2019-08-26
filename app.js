@@ -12,7 +12,7 @@ const config = require("./config/database");
 mongoose.connect(config.database, {
   useCreateIndex: true,
   useFindAndModify: false,
-  useNewUrlParser: true
+  useNewUrlParser: true,
 });
 
 // On database connection

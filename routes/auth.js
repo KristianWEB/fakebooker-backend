@@ -11,7 +11,7 @@ const getAuthenticatedUser = require("./shared/authenticate");
 router.post("/register", async (req, res) => {
   const newUser = new User({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
   });
 
   try {
@@ -20,19 +20,19 @@ router.post("/register", async (req, res) => {
     if (user) {
       return res.status(409).json({
         success: false,
-        msg: `User already exists with email ${newUser.email}`
+        msg: `User already exists with email ${newUser.email}`,
       });
     }
     await User.addUser(newUser);
 
     return res.json({
       success: true,
-      msg: "User registered"
+      msg: "User registered",
     });
   } catch (err) {
     return res.status(409).json({
       success: false,
-      msg: "Some error occurred while registering the user"
+      msg: "Some error occurred while registering the user",
     });
   }
 });
@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.json({
         success: false,
-        msg: "User not found"
+        msg: "User not found",
       });
     }
 
@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
 
     if (result) {
       const token = jwt.sign(user.toJSON(), config.secret, {
-        expiresIn: 604800 // 1 week
+        expiresIn: 604800, // 1 week
       });
 
       return res.json({
@@ -64,19 +64,19 @@ router.post("/login", async (req, res) => {
         token: `JWT ${token}`,
         user: {
           id: user._id,
-          email: user.email
-        }
+          email: user.email,
+        },
       });
     }
 
     return res.json({
       success: false,
-      msg: "Wrong password"
+      msg: "Wrong password",
     });
   } catch (err) {
     return res.status(409).json({
       success: false,
-      msg: "Some error occurred while logging in"
+      msg: "Some error occurred while logging in",
     });
   }
 });
@@ -91,12 +91,12 @@ router.get("/test", async (req, res, next) => {
 
     return res.json({
       success: true,
-      user: _.omit(user, ["_id", "password", "__v"])
+      user: _.omit(user, ["_id", "password", "__v"]),
     });
   } catch (err) {
     return res.status(401).json({
       success: false,
-      msg: "You are unauthorized"
+      msg: "You are unauthorized",
     });
   }
 });
