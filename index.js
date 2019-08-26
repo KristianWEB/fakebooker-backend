@@ -1,7 +1,7 @@
 // Configure dotenv
-require('dotenv').config();
+require("dotenv").config();
 // Express App
-const app = require('./app');
+const app = require("./app");
 
 // Port Number
 const port = process.env.PORT || 8080;
