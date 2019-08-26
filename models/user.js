@@ -7,24 +7,24 @@ const UserSchema = mongoose.Schema({
   displayName: { type: String, required: true },
   profileImage: {
     type: String,
-    default: "https://www.w3schools.com/w3images/avatar2.png"
+    default: "https://www.w3schools.com/w3images/avatar2.png",
   },
   coverImage: {
     type: String,
-    default: "https://www.w3schools.com/w3images/avatar2.png"
+    default: "https://www.w3schools.com/w3images/avatar2.png",
   },
   joinDate: { type: Number, required: true, default: Date.now() },
   lastLogin: { type: Number, required: true, default: Date.now() },
   status: {
-    isActive: { type: Boolean, default: true },
-    lastActiveDate: { type: Number, default: Date.now() }
+    isDeactivated: { type: Boolean, default: false },
+    lastActiveDate: { type: Number, default: Date.now() },
   },
   about: {
     dob: Number,
-    bio: String
+    bio: String,
   },
   password: { required: true, type: String },
-  roles: { type: Array, default: ["user"] }
+  roles: { type: Array, default: ["user"] },
 });
 
 const User = mongoose.model("User", UserSchema);
