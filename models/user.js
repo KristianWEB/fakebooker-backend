@@ -36,17 +36,22 @@ module.exports.getUserById = (id, callback) => User.findById(id, callback);
 module.exports.getUserByEmail = email => User.findOne({ email }).exec();
 
 module.exports.addUser = newUser => {
-  bcrypt.genSalt(10, (_, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      if (err) {
-        throw err;
-      }
+  return new Promise(resolve => {
+    bcrypt.genSalt(10, (_, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) {
+          throw err;
+        }
 
-      const name = newUser.email.substring(0, newUser.email.lastIndexOf("@"));
-      newUser.displayName = name;
-      newUser.password = hash;
+        const name = newUser.email.substring(0, newUser.email.lastIndexOf("@"));
+        newUser.displayName = name;
+        newUser.password = hash;
 
-      return newUser.save();
+        newUser.save((error, savedObj) => {
+          if (error) throw error;
+          resolve(savedObj);
+        });
+      });
     });
   });
 };

@@ -23,11 +23,20 @@ router.post("/register", async (req, res) => {
         msg: `User already exists with email ${newUser.email}`,
       });
     }
-    await User.addUser(newUser);
+    const savedUser = await User.addUser(newUser);
+
+    const token = jwt.sign(newUser.toJSON(), config.secret, {
+      expiresIn: 604800, // 1 week
+    });
 
     return res.json({
       success: true,
       msg: "User registered",
+      token: `JWT ${token}`,
+      user: {
+        id: savedUser._id,
+        email: savedUser.email,
+      },
     });
   } catch (err) {
     return res.status(409).json({
