@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const Post = require("./post");
 
 // User Schema
 const UserSchema = mongoose.Schema({
@@ -25,6 +26,7 @@ const UserSchema = mongoose.Schema({
   },
   password: { required: true, type: String },
   roles: { type: Array, default: ["user"] },
+  posts: { type: [Post.schema], required: true },
 });
 
 const User = mongoose.model("User", UserSchema);
