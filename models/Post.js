@@ -19,7 +19,7 @@ const PostSchema = mongoose.Schema({
   ],
   edited: Boolean,
   lastEditedDate: Number,
-  comments: [Comment],
+  comments: [Comment.schema],
 });
 
 const Post = mongoose.model("Post", PostSchema);
