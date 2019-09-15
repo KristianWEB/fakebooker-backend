@@ -4,7 +4,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 const config = require("../config/database");
-const User = require("../models/user");
+const User = require("../models/User");
 const getAuthenticatedUser = require("./shared/authenticate");
 
 // Register

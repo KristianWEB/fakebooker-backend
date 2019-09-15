@@ -1,32 +1,25 @@
 const mongoose = require("mongoose");
+const Comment = require("./Comment");
 
 const PostSchema = mongoose.Schema({
-  source: { required: true, type: String },
-  destination: { required: true, type: String },
-  typeOfPost: { required: true, type: String },
-  content: { type: String, default: "" },
-  creationDate: { required: true, type: Number, default: Date.now() },
-  likesCount: { requierd: true, type: Number, default: 0 },
-  dislikesCount: { requierd: true, type: Number, default: 0 },
+  source: String, // ObjectId of person who made the post
+  destination: String, // ObjectId of person who received the post(whose wall?)
+  typeOfPost: String, // Type of post[i.e., text, image, url like reddit?]
+  content: String,
+  creationDate: Number,
   likedBy: [
     {
-      id: String,
-      username: String,
-      displayName: String,
-      profileImage: String,
+      id: String, // ObjectId of the user,
     },
   ],
   disLikedBy: [
     {
-      id: String,
-      username: String,
-      displayName: String,
-      profileImage: String,
+      id: String, // ObjectId of the user,
     },
   ],
-  comments: [], // to be filled with comment model
-  edited: { required: true, type: Boolean, default: false },
-  lastEditedDate: { required: true, type: Number, default: Date.now() },
+  edited: Boolean,
+  lastEditedDate: Number,
+  comments: [Comment],
 });
 
 const Post = mongoose.model("Post", PostSchema);
