@@ -12,17 +12,25 @@ router.post("/register", async (req, res) => {
   const newUser = new User({
     email: req.body.email,
     password: req.body.password,
+    username: req.body.username,
   });
 
+  // check if username or email is already taken
   try {
-    const user = await User.getUserByEmail(newUser.email);
+    const errors = {};
+    let user = await User.getUserByEmail(newUser.email);
+    if (user) errors.email = `User already exists with email`;
 
-    if (user) {
+    user = await User.getUserByUsername(newUser.username);
+    if (user) errors.username = `User already exists with username`;
+
+    if (Object.keys(errors).length > 0) {
       return res.status(409).json({
         success: false,
-        msg: `User already exists with email ${newUser.email}`,
+        errors,
       });
     }
+
     const savedUser = await User.addUser(newUser);
 
     const token = jwt.sign(newUser.toJSON(), config.secret, {
@@ -36,6 +44,7 @@ router.post("/register", async (req, res) => {
       user: {
         id: savedUser._id,
         email: savedUser.email,
+        username: savedUser.username,
       },
     });
   } catch (err) {
@@ -74,6 +83,7 @@ router.post("/login", async (req, res) => {
         user: {
           id: user._id,
           email: user.email,
+          username: user.username,
         },
       });
     }

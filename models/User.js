@@ -5,6 +5,7 @@ const Post = require("./Post");
 // User Schema
 const UserSchema = mongoose.Schema({
   email: { required: true, type: String },
+  username: { required: true, type: String },
   displayName: { type: String, required: true },
   profileImage: {
     type: String,
@@ -36,6 +37,9 @@ module.exports = User;
 module.exports.getUserById = (id, callback) => User.findById(id, callback);
 
 module.exports.getUserByEmail = email => User.findOne({ email }).exec();
+
+module.exports.getUserByUsername = username =>
+  User.findOne({ username }).exec();
 
 module.exports.addUser = newUser => {
   return new Promise(resolve => {
