@@ -33,7 +33,14 @@ router.post("/register", async (req, res) => {
 
     const savedUser = await User.addUser(newUser);
 
-    const token = jwt.sign(newUser.toJSON(), config.secret, {
+    const jwtData = {
+      roles: newUser.roles,
+      id: newUser._id,
+      email: newUser.email,
+      username: newUser.username,
+      displayName: newUser.displayName,
+    };
+    const token = jwt.sign(jwtData, config.secret, {
       expiresIn: 604800, // 1 week
     });
 
