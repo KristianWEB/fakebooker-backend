@@ -124,7 +124,7 @@ router.get("/test", async (req, res, next) => {
 // method that returns object which will be put into jwt token
 const jwtData = user => ({
   roles: user.roles,
-  id: user._id,
+  _id: user._id,
   email: user.email,
   username: user.username,
   displayName: user.displayName,
