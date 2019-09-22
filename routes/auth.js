@@ -102,7 +102,7 @@ router.post("/login", async (req, res) => {
 
 /*
  * Test endpoint
- * Try hitting this without Auth header, you will/should 401 error
+ * Try hitting this without Auth header, you will/should get 401 error
  */
 router.get("/test", async (req, res, next) => {
   try {
