@@ -38,9 +38,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 require("./config/passport")(passport);
 
-const auth = require("./routes/auth");
-
-app.use("/api/auth", auth);
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/profile", require("./routes/profile"));
 
 app.get("/test", (req, res) => {
   res.send({ data: "hello from test endpoint" });
