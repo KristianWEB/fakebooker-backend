@@ -48,4 +48,37 @@ router.get("/:username?", async (req, res, next) => {
   }
 });
 
+router.get("/:username/about/", async (req, res, next) => {
+  try {
+    const user = await getAuthenticatedUser(req, res, next);
+    const username = req.params.username || user.username;
+    if (!username) {
+      return res.status(401).json({
+        success: false,
+        msg: "You are unauthorized",
+      });
+    }
+
+    const dbUser = await User.getUserByUsername(username);
+    return res.json({
+      success: true,
+      info: {
+        email: dbUser.email,
+        username: dbUser.username,
+        displayName: dbUser.displayName,
+        joinDate: dbUser.joinDate,
+        lastLogin: dbUser.lastLogin,
+        lastActiveDate: dbUser.lastActiveDate,
+        dob: dbUser.dob,
+        bio: dbUser.bio,
+      },
+    });
+  } catch (err) {
+    return res.status(401).json({
+      success: false,
+      msg: "You are unauthorized",
+    });
+  }
+});
+
 module.exports = router;
