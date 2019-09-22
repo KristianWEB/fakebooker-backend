@@ -8,10 +8,6 @@ module.exports = (req, res, next) =>
     passport.authenticate("jwt", { session: false }, (err, user, info) => {
       if (err || !user) {
         reject(new Error("Authentication failed: ", err));
-        // reject({
-        //   err,
-        //   user,
-        // });
       }
       user = JSON.parse(JSON.stringify(user));
       resolve(user);
