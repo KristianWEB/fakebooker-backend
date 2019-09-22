@@ -33,14 +33,7 @@ router.post("/register", async (req, res) => {
 
     const savedUser = await User.addUser(newUser);
 
-    const jwtData = {
-      roles: newUser.roles,
-      id: newUser._id,
-      email: newUser.email,
-      username: newUser.username,
-      displayName: newUser.displayName,
-    };
-    const token = jwt.sign(jwtData, config.secret, {
+    const token = jwt.sign(jwtData(newUser), config.secret, {
       expiresIn: 604800, // 1 week
     });
 
@@ -80,7 +73,7 @@ router.post("/login", async (req, res) => {
     const result = await User.comparePassword(password, user.password);
 
     if (result) {
-      const token = jwt.sign(user.toJSON(), config.secret, {
+      const token = jwt.sign(jwtData(user), config.secret, {
         expiresIn: 604800, // 1 week
       });
 
@@ -125,6 +118,16 @@ router.get("/test", async (req, res, next) => {
       msg: "You are unauthorized",
     });
   }
+});
+
+// Other methods
+// method that returns object which will be put into jwt token
+const jwtData = user => ({
+  roles: user.roles,
+  id: user._id,
+  email: user.email,
+  username: user.username,
+  displayName: user.displayName,
 });
 
 module.exports = router;

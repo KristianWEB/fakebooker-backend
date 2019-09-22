@@ -19,5 +19,6 @@ module.exports = {
     "no-console": "off",
     "no-underscore-dangle": "off",
     "no-param-reassign": 0,
+    "no-use-before-define": "off",
   },
 };
