@@ -8,7 +8,7 @@ const passport = require("passport");
 // Previous db connection
 // const mongoose = require("mongoose");
 // const config = require("./config/database");
-const connectDB = require('./config/database');
+const connectDB = require("./config/database");
 
 // Connect Database
 connectDB();

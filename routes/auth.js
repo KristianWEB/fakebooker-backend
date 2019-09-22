@@ -6,6 +6,7 @@ const _ = require("lodash");
 // Previous db connection
 // const config = require("../config/database");
 const config = require("config");
+
 const secret = config.get("jwtSecret");
 const User = require("../models/User");
 const getAuthenticatedUser = require("./shared/authenticate");
