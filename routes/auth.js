@@ -3,7 +3,11 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
-const config = require("../config/database");
+// Previous db connection
+// const config = require("../config/database");
+const config = require("config");
+
+const secret = config.get("jwtSecret");
 const User = require("../models/User");
 const getAuthenticatedUser = require("./shared/authenticate");
 
@@ -33,7 +37,7 @@ router.post("/register", async (req, res) => {
 
     const savedUser = await User.addUser(newUser);
 
-    const token = jwt.sign(jwtData(newUser), config.secret, {
+    const token = jwt.sign(jwtData(newUser), secret, {
       expiresIn: 604800, // 1 week
     });
 
@@ -73,7 +77,7 @@ router.post("/login", async (req, res) => {
     const result = await User.comparePassword(password, user.password);
 
     if (result) {
-      const token = jwt.sign(jwtData(user), config.secret, {
+      const token = jwt.sign(jwtData(user), secret, {
         expiresIn: 604800, // 1 week
       });
 
