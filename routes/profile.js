@@ -48,35 +48,4 @@ router.get("/:username?", async (req, res, next) => {
   }
 });
 
-// router.get("/:username", async (req, res) => {
-//   try {
-//     const { username } = req.params;
-//     const user = await User.getUserByUsername(username);
-//     if (!user) {
-//       return res.status(404).json({
-//         success: false,
-//         msg: `User with username ${username} doesn't exist`,
-//       });
-//     }
-
-//     return res.json({
-//       success: true,
-//       info: {
-//         id: user._id,
-//         username: user.username,
-//         email: user.email,
-//         displayName: user.displayName,
-//         profileImage: user.profileImage,
-//         coverImage: user.coverImage,
-//         posts: user.posts,
-//       },
-//     });
-//   } catch (err) {
-//     return res.status(401).json({
-//       success: false,
-//       msg: "You are unauthorized",
-//     });
-//   }
-// });
-
 module.exports = router;
