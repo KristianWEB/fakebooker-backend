@@ -8,7 +8,9 @@ const Post = require("../models/Post");
 
 const getAuthenticatedUser = require("./shared/authenticate");
 
-// Creates post and stores it in DB
+// @route   POST api/posts
+// @desc    Create a post
+// @access  Private (User with token can add their posts)
 router.post(
   "/",
   [
@@ -27,6 +29,8 @@ router.post(
 
       const newPost = new Post({
         user: userId,
+        // Send id instead of whole user object
+        // user: _.pick(userId, ["_id"]),
         content: req.body.text,
       });
 
@@ -39,6 +43,22 @@ router.post(
     }
   }
 );
+
+// @route   GET api/posts
+// @desc    Get all posts
+// @access  Public
+router.get("/", async (req, res) => {
+  try {
+    const user = await getAuthenticatedUser(req, res);
+    const userId = _.pick(user, ["_id"]);
+
+    const posts = await Post.getPostsById(userId);
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 /*
  * Test endpoint
