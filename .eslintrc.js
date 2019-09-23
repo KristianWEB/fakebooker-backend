@@ -20,5 +20,6 @@ module.exports = {
     "no-underscore-dangle": "off",
     "no-param-reassign": 0,
     "no-use-before-define": "off",
+    "func-names": "off",
   },
 };

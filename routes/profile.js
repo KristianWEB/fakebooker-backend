@@ -20,7 +20,7 @@ router.get("/:username?", async (req, res, next) => {
       });
     }
 
-    const dbUser = await User.getUserByUsername(username);
+    const dbUser = await User.findByUsername(username);
     if (!dbUser) {
       return res.status(404).json({
         success: false,
@@ -59,7 +59,7 @@ router.get("/:username/about/", async (req, res, next) => {
       });
     }
 
-    const dbUser = await User.getUserByUsername(username);
+    const dbUser = await User.findByUsername(username);
     return res.json({
       success: true,
       info: {

@@ -1,20 +1,13 @@
 const mongoose = require("mongoose");
 
+const { ObjectId } = mongoose.Schema.Types;
+
 const CommentSchema = mongoose.Schema({
-  id: String,
-  userId: String,
+  userId: ObjectId,
   content: String,
   creationDate: Number,
-  likedBy: [
-    {
-      id: String,
-    },
-  ],
-  disLikedBy: [
-    {
-      id: String,
-    },
-  ],
+  likedBy: [ObjectId],
+  disLikedBy: [ObjectId],
   edited: Boolean,
   lastEditedDate: Number,
 });
