@@ -25,12 +25,7 @@ router.post(
     }
 
     try {
-      const userId = await getAuthenticatedUser(req, res);
-
       const newPost = new Post({
-        user: userId,
-        // Send id instead of whole user object
-        // user: _.pick(userId, ["_id"]),
         content: req.body.text,
       });
 

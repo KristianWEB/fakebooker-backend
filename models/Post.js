@@ -4,7 +4,10 @@ const Comment = require("./Comment");
 const { Schema } = mongoose;
 
 const PostSchema = mongoose.Schema({
-  user: Schema.Types.ObjectId, // ObjectId of person who made the post
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  }, // Reference to id of user that made the post
   destination: String, // ObjectId of person who received the post(whose wall?)
   typeOfPost: String, // Type of post[i.e., text, image, url like reddit?]
   content: String,
