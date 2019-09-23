@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const Comment = require("./Comment");
 
+const { Schema } = mongoose;
+
 const PostSchema = mongoose.Schema({
-  source: String, // ObjectId of person who made the post
+  user: Schema.Types.ObjectId, // ObjectId of person who made the post
   destination: String, // ObjectId of person who received the post(whose wall?)
   typeOfPost: String, // Type of post[i.e., text, image, url like reddit?]
   content: String,
@@ -25,3 +27,5 @@ const PostSchema = mongoose.Schema({
 const Post = mongoose.model("Post", PostSchema);
 
 module.exports = Post;
+
+module.exports.getPostsById = user => Post.find({ user });
