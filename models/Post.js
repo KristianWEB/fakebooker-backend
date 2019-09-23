@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const PostSchema = mongoose.Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User",
   }, // Reference to id of user that made the post
   destination: String, // ObjectId of person who received the post(whose wall?)
   typeOfPost: String, // Type of post[i.e., text, image, url like reddit?]
