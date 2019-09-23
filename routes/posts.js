@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 const _ = require("lodash");
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require("express-validator");
 
 const Post = require("../models/Post");
 
@@ -21,7 +21,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    
+
     try {
       const userId = await getAuthenticatedUser(req, res);
 
@@ -32,10 +32,10 @@ router.post(
 
       const post = await newPost.save();
 
-      res.json(post);
+      return res.json(post);
     } catch (err) {
-      console.error(error.message);
-      res.status(500).send("Server Error");
+      console.error(err.message);
+      return res.status(500).send("Server Error");
     }
   }
 );
