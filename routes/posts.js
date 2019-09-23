@@ -53,7 +53,7 @@ router.get("/", async (req, res) => {
     const userId = _.pick(user, ["_id"]);
 
     const posts = await Post.getPostsById(userId);
-    
+
     res.json(posts);
   } catch (err) {
     console.error(err.message);

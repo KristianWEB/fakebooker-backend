@@ -28,4 +28,4 @@ const Post = mongoose.model("Post", PostSchema);
 
 module.exports = Post;
 
-module.exports.getPostsById = (user) => Post.find({user});
+module.exports.getPostsById = user => Post.find({ user });
