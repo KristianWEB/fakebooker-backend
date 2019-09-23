@@ -1,27 +1,19 @@
 const mongoose = require("mongoose");
-const Comment = require("./Comment");
 
-const { Schema } = mongoose;
+const { ObjectId } = mongoose.Schema.Types;
+const Comment = require("./Comment");
 
 const PostSchema = mongoose.Schema({
   user: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: "User",
   }, // Reference to id of user that made the post
-  destination: String, // ObjectId of person who received the post(whose wall?)
+  destination: ObjectId, // ObjectId of person who received the post(whose wall?)
   typeOfPost: String, // Type of post[i.e., text, image, url like reddit?]
   content: String,
   creationDate: Number,
-  likedBy: [
-    {
-      id: String, // ObjectId of the user,
-    },
-  ],
-  disLikedBy: [
-    {
-      id: String, // ObjectId of the user,
-    },
-  ],
+  likedBy: [ObjectId], // ObjectId of the user,
+  disLikedBy: [ObjectId], // ObjectId of the user,
   edited: Boolean,
   lastEditedDate: Number,
   comments: [Comment.schema],

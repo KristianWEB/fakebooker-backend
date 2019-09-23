@@ -22,10 +22,10 @@ router.post("/register", async (req, res) => {
   // check if username or email is already taken
   try {
     const errors = {};
-    let user = await User.getUserByEmail(newUser.email);
+    let user = await User.findByEmail(newUser.email);
     if (user) errors.email = `User already exists with email`;
 
-    user = await User.getUserByUsername(newUser.username);
+    user = await User.findByUsername(newUser.username);
     if (user) errors.username = `User already exists with username`;
 
     if (Object.keys(errors).length > 0) {
@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    const savedUser = await User.addUser(newUser);
+    const savedUser = await newUser.add();
 
     const token = jwt.sign(jwtData(newUser), secret, {
       expiresIn: 604800, // 1 week
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
   const { password } = req.body;
 
   try {
-    const user = await User.getUserByEmail(email);
+    const user = await User.findByEmail(email, "+password");
 
     if (!user) {
       return res.json({
@@ -73,8 +73,7 @@ router.post("/login", async (req, res) => {
         msg: "User not found",
       });
     }
-
-    const result = await User.comparePassword(password, user.password);
+    const result = await user.comparePassword(password);
 
     if (result) {
       const token = jwt.sign(jwtData(user), secret, {

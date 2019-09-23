@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const Post = require("./Post");
 
-// User Schema
 const UserSchema = mongoose.Schema({
   email: { required: true, type: String },
   username: { required: true, type: String },
@@ -25,42 +24,40 @@ const UserSchema = mongoose.Schema({
     dob: Number,
     bio: String,
   },
-  password: { required: true, type: String },
+  password: { required: true, type: String, select: false },
   roles: { type: Array, default: ["user"] },
   posts: { type: [Post.schema], required: true },
 });
 
-const User = mongoose.model("User", UserSchema);
+UserSchema.statics.findByEmail = function(email, projection, opts) {
+  return this.findOne({ email }, projection, opts);
+};
 
-module.exports = User;
+UserSchema.statics.findByUsername = function(username, projection, opts) {
+  return this.findOne({ username }, projection, opts);
+};
 
-module.exports.getUserById = (id, callback) => User.findById(id, callback);
-
-module.exports.getUserByEmail = email => User.findOne({ email }).exec();
-
-module.exports.getUserByUsername = username =>
-  User.findOne({ username }).exec();
-
-module.exports.addUser = newUser => {
+UserSchema.methods.add = function() {
   return new Promise(resolve => {
-    bcrypt.genSalt(10, (_, salt) => {
-      bcrypt.hash(newUser.password, salt, (err, hash) => {
-        if (err) {
-          throw err;
-        }
+    bcrypt.hash(this.password, 10, (err, hash) => {
+      if (err) throw err;
 
-        const name = newUser.email.substring(0, newUser.email.lastIndexOf("@"));
-        newUser.displayName = name;
-        newUser.password = hash;
+      const name = this.email.substring(0, this.email.lastIndexOf("@"));
+      this.displayName = name;
+      this.password = hash;
 
-        newUser.save((error, savedObj) => {
-          if (error) throw error;
-          resolve(savedObj);
-        });
+      this.save((error, savedObj) => {
+        if (error) throw error;
+        resolve(savedObj);
       });
     });
   });
 };
 
-module.exports.comparePassword = (password, hash) =>
-  bcrypt.compare(password, hash);
+UserSchema.methods.comparePassword = function(password) {
+  return bcrypt.compare(password, this.password);
+};
+
+const User = mongoose.model("User", UserSchema);
+
+module.exports = User;
