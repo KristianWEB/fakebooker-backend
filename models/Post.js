@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const Comment = require("./Comment");
+const Schema = mongoose.Schema;
 
 const PostSchema = mongoose.Schema({
-  source: String, // ObjectId of person who made the post
+  user: Schema.Types.ObjectId, // ObjectId of person who made the post
   destination: String, // ObjectId of person who received the post(whose wall?)
   typeOfPost: String, // Type of post[i.e., text, image, url like reddit?]
   content: String,

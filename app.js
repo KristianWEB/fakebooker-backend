@@ -46,6 +46,7 @@ require("./config/passport")(passport);
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/profile", require("./routes/profile"));
+app.use("/api/posts", require("./routes/posts"));
 
 app.get("/test", (req, res) => {
   res.send({ data: "hello from test endpoint" });

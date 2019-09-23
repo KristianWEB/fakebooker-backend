@@ -7,7 +7,8 @@
     "test": "jest --runInBand",
     "lint": "eslint ./",
     "lint-fix": "eslint --fix ./",
-    "start": "node index"
+    "start": "node index",
+    "dev": "nodemon index"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
+    "nodemon": "^1.19.2",
     "prettier": "^1.18.2"
   }
 }
