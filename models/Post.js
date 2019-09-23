@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Comment = require("./Comment");
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const PostSchema = mongoose.Schema({
   user: Schema.Types.ObjectId, // ObjectId of person who made the post
