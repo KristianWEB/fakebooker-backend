@@ -3,11 +3,9 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
-// Previous db connection
-// const config = require("../config/database");
-const config = require("config");
+const props = require("../config/properties");
 
-const secret = config.get("jwtSecret");
+const secret = props.JWT_SECRET;
 const User = require("../models/User");
 const getAuthenticatedUser = require("./shared/authenticate");
 

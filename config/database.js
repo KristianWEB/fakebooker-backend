@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-// Import config package and get db URI from default.json
-const config = require("config");
+const props = require("./properties");
 
-const db = config.get("mongoURI");
+const db = props.DB_URL;
 
 const connectDB = async () => {
   try {
@@ -19,13 +18,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-
-// Previous db connection
-// const databaseURL =
-//   process.env.DB_URL || "mongodb://localhost:27017/sidekickdb";
-
-// module.exports = {
-//   database: databaseURL,
-//   // Needed for passportjs
-//   secret: "yoursecret",
-// };

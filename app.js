@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 
 const app = express();
@@ -5,31 +6,11 @@ const app = express();
 const volleyball = require("volleyball");
 const cors = require("cors");
 const passport = require("passport");
-// Previous db connection
-// const mongoose = require("mongoose");
-// const config = require("./config/database");
+
 const connectDB = require("./config/database");
 
 // Connect Database
 connectDB();
-
-// Previous db connection
-// // Connecting to database
-// mongoose.connect(config.database, {
-//   useCreateIndex: true,
-//   useFindAndModify: false,
-//   useNewUrlParser: true,
-// });
-
-// // On database connection
-// mongoose.connection.on("connected", () => {
-//   console.log(`Connected to database ${config.database}`);
-// });
-
-// // On database error
-// mongoose.connection.on("error", err => {
-//   console.log(`Database error ${err}`);
-// });
 
 // HTTP logger & Express built-in middleware that does job of body-parser.
 app.use(volleyball);
