@@ -1,10 +1,11 @@
 // Configure dotenv
 require("dotenv").config();
+const props = require("./config/properties");
 // Express App
 const app = require("./app");
 
 // Port Number
-const port = process.env.PORT || 8080;
+const port = props.PORT;
 
 // Start Server
 app.listen(port, () => {
