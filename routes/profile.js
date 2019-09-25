@@ -2,23 +2,33 @@ const express = require("express");
 
 const router = express.Router();
 const User = require("../models/User");
-const getAuthenticatedUser = require("./shared/authenticate");
+const { verifyToken, getUser } = require("./shared/authenticate");
 
-router.get("/:username?", async (req, res, next) => {
+router.get("/", verifyToken, getUser, async (req, res) => {
   try {
-    let username;
-    if (req.params.username) username = req.params.username;
-    else {
-      const user = await getAuthenticatedUser(req, res, next);
-      username = user.username;
-    }
+    res.json({
+      success: true,
+      info: {
+        id: req.user._id,
+        username: req.user.username,
+        email: req.user.email,
+        displayName: req.user.displayName,
+        profileImage: req.user.profileImage,
+        coverImage: req.user.coverImage,
+        posts: req.user.posts,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal Server Error",
+    });
+  }
+});
 
-    if (!username) {
-      return res.status(401).json({
-        success: false,
-        msg: "You are unauthorized",
-      });
-    }
+router.get("/:username", async (req, res) => {
+  try {
+    const { username } = req.params;
 
     const dbUser = await User.findByUsername(username);
     if (!dbUser) {
@@ -41,25 +51,24 @@ router.get("/:username?", async (req, res, next) => {
       },
     });
   } catch (err) {
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      msg: "You are unauthorized",
+      msg: "Internal Server Error",
     });
   }
 });
 
-router.get("/:username/about/", async (req, res, next) => {
+router.get("/:username/about", async (req, res) => {
   try {
-    const user = await getAuthenticatedUser(req, res, next);
-    const username = req.params.username || user.username;
-    if (!username) {
-      return res.status(401).json({
-        success: false,
-        msg: "You are unauthorized",
-      });
-    }
+    const { username } = req.params;
 
     const dbUser = await User.findByUsername(username);
+    if (!dbUser) {
+      return res.status(404).json({
+        success: false,
+        msg: `User with username ${username} doesn't exist`,
+      });
+    }
     return res.json({
       success: true,
       info: {
@@ -74,9 +83,9 @@ router.get("/:username/about/", async (req, res, next) => {
       },
     });
   } catch (err) {
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      msg: "You are unauthorized",
+      msg: "Internal Server Error",
     });
   }
 });

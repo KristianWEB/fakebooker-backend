@@ -1,18 +1,18 @@
 const express = require("express");
 
 const router = express.Router();
-const _ = require("lodash");
 const { check, validationResult } = require("express-validator");
 
 const Post = require("../models/Post");
 
-const getAuthenticatedUser = require("./shared/authenticate");
+const { verifyToken } = require("./shared/authenticate");
 
 // @route   POST api/posts
 // @desc    Create a post
 // @access  Private (User with token can add their posts)
 router.post(
   "/",
+  verifyToken,
   [
     check("text", "Text is required")
       .not()
@@ -25,11 +25,10 @@ router.post(
     }
 
     try {
-      const user = await getAuthenticatedUser(req, res);
-      const userId = _.pick(user, ["_id"]);
+      const { _id } = req.payload;
 
       const newPost = new Post({
-        user: userId,
+        user: _id,
         content: req.body.text,
       });
 
@@ -46,12 +45,11 @@ router.post(
 // @route   GET api/posts
 // @desc    Get all posts
 // @access  Public
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
-    const user = await getAuthenticatedUser(req, res);
-    const userId = _.pick(user, ["_id"]);
+    const { _id } = req.payload;
 
-    const posts = await Post.getPostsById(userId);
+    const posts = await Post.getPostsById(_id);
 
     res.json(posts);
   } catch (err) {
@@ -63,13 +61,13 @@ router.get("/", async (req, res) => {
  * Test endpoint
  * Returns error without "Authentication" & return user id with token
  */
-router.get("/test", async (req, res, next) => {
+router.get("/test", verifyToken, (req, res) => {
   try {
-    const user = await getAuthenticatedUser(req, res, next);
+    const { _id } = req.payload;
 
     return res.json({
       success: true,
-      user: _.pick(user, ["_id"]),
+      user: _id,
     });
   } catch (err) {
     console.error(err.message);

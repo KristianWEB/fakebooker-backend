@@ -7,7 +7,7 @@ const props = require("../config/properties");
 
 const secret = props.JWT_SECRET;
 const User = require("../models/User");
-const getAuthenticatedUser = require("./shared/authenticate");
+const { verifyToken, getUser } = require("./shared/authenticate");
 
 // Register
 router.post("/register", async (req, res) => {
@@ -105,13 +105,11 @@ router.post("/login", async (req, res) => {
  * Test endpoint
  * Try hitting this without Auth header, you will/should get 401 error
  */
-router.get("/test", async (req, res, next) => {
+router.get("/test", verifyToken, getUser, (req, res) => {
   try {
-    const user = await getAuthenticatedUser(req, res, next);
-
     return res.json({
       success: true,
-      user: _.omit(user, ["_id", "password", "__v"]),
+      user: _.omit(req.user, ["_id", "password", "__v"]),
     });
   } catch (err) {
     return res.status(401).json({

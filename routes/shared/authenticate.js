@@ -1,15 +1,44 @@
-const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../../config/properties");
+const User = require("../../models/User");
 
-// Returns the authenticated user information based on token sent in Authorization header
-module.exports = (req, res, next) =>
-  new Promise((resolve, reject) => {
-    // keeping info here just in case we need it later
-    // eslint-disable-next-line no-unused-vars
-    passport.authenticate("jwt", { session: false }, (err, user, info) => {
-      if (err || !user) {
-        reject(new Error("Authentication failed: ", err));
+module.exports = {
+  verifyToken: (req, res, next) => {
+    // Don't throw err if authorization header is undefined
+    const token =
+      req.headers.authorization && req.headers.authorization.split(" ")[1];
+
+    jwt.verify(token, JWT_SECRET, (err, payload) => {
+      if (err) {
+        return res.status(401).json({
+          success: false,
+          message: "Unauthorized",
+        });
       }
-      user = JSON.parse(JSON.stringify(user));
-      resolve(user);
-    })(req, res, next);
-  });
+      req.payload = payload;
+      return next();
+    });
+  },
+  getUser: (req, res, next) => {
+    // expects verifyToken middleware to come first
+    const { _id } = req.payload;
+
+    User.findById(_id, (err, user) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Internal Server Error",
+        });
+      }
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User Not Found",
+        });
+      }
+
+      req.user = user;
+      return next();
+    });
+  },
+};
