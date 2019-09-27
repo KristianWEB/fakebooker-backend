@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
@@ -13,7 +12,9 @@ const PostSchema = new Schema({
   },
   destination: {
     type: ObjectId, // User who received the post(whose wall?)
-    required: true,
+    default(){
+      return this.user;
+    },
     ref: "User",
   },
   typeOfPost: {
@@ -34,7 +35,14 @@ const PostSchema = new Schema({
     ref: "User",
   },
   edited: { type: Boolean, default: false },
-  lastEditedDate: { type: Number, default: null },
+  lastEditedDate: { 
+    type: Number, 
+    default: null,
+     // must set lastEditedDate to something if edited is true
+    required(){
+      return this.edited
+    }
+   },
   comments: { type: [Comment.schema], default: [] },
 });
 
