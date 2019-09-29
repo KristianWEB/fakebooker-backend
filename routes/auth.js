@@ -9,6 +9,21 @@ const secret = props.JWT_SECRET;
 const User = require("../models/User");
 const getAuthenticatedUser = require("./shared/authenticate");
 
+router.get("/", async (req, res, next) => {
+  try {
+    const user = await getAuthenticatedUser(req, res, next);
+    return res.json({
+      success: true,
+      user: _.omit(user, ["password", "__v"])
+    });
+  } catch (error) {
+    return res.status(409).json({
+      success: false,
+      msg: "Some error occurred while fetching user, please login again.",
+    });
+  }
+})
+
 // Register
 router.post("/register", async (req, res) => {
   const newUser = new User({
