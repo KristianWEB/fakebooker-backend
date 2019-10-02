@@ -1,26 +1,43 @@
 const mongoose = require("mongoose");
 
-const { ObjectId } = mongoose.Schema.Types;
+const { Schema } = mongoose;
+const { ObjectId } = Schema.Types;
+
 const Comment = require("./Comment");
 
-const PostSchema = mongoose.Schema({
+const PostSchema = new Schema({
   user: {
     type: ObjectId,
+    required: true,
     ref: "User",
-  }, // Reference to id of user that made the post
-  destination: ObjectId, // ObjectId of person who received the post(whose wall?)
-  typeOfPost: String, // Type of post[i.e., text, image, url like reddit?]
-  content: String,
-  creationDate: Number,
-  likedBy: [ObjectId], // ObjectId of the user,
-  disLikedBy: [ObjectId], // ObjectId of the user,
-  edited: Boolean,
-  lastEditedDate: Number,
-  comments: [Comment.schema],
+  },
+  destination: {
+    type: ObjectId, // User who received the post(whose wall?)
+    required: true,
+    ref: "User",
+  },
+  typeOfPost: {
+    type: String,
+    enum: ["text", "image"], // TODO: add more enum types
+    default: "text",
+  },
+  content: { type: String, required: true },
+  creationDate: { type: Number, default: Date.now },
+  likedBy: {
+    type: [ObjectId],
+    default: [],
+    ref: "User",
+  },
+  disLikedBy: {
+    type: [ObjectId],
+    default: [],
+    ref: "User",
+  },
+  edited: { type: Boolean, default: false },
+  lastEditedDate: { type: Number, default: null },
+  comments: { type: [Comment.schema], default: [] },
 });
 
 const Post = mongoose.model("Post", PostSchema);
 
 module.exports = Post;
-
-module.exports.getPostsById = user => Post.find({ user });
