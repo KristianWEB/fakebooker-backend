@@ -9,6 +9,7 @@ const secret = props.JWT_SECRET;
 const User = require("../models/User");
 const getAuthenticatedUser = require("./shared/authenticate");
 
+// Load user
 router.get("/", async (req, res, next) => {
   try {
     const user = await getAuthenticatedUser(req, res, next);
