@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
     const user = await getAuthenticatedUser(req, res);
     const userId = _.pick(user, ["_id"]);
 
-    const posts = await Post.getPostsById(userId);
+    const posts = await Post.find({ user: userId });
 
     res.json(posts);
   } catch (err) {
