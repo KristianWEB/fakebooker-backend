@@ -6,7 +6,7 @@ const { JWT_SECRET } = require("../config/properties");
 module.exports = passport => {
   const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
-    secretOrKey: JWT_SECRET
+    secretOrKey: JWT_SECRET,
   };
   passport.use(
     new JwtStrategy(opts, (jwtPayload, done) => {
