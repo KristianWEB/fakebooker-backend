@@ -13,6 +13,7 @@ const PostSchema = new Schema({
   },
   destination: {
     type: ObjectId, // User who received the post(whose wall?)
+    // assume it should be posted to user's wall if not set other wise
     default() {
       return this.user;
     },

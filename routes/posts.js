@@ -110,7 +110,6 @@ router.post(
         user: _id,
         content,
         typeOfPost,
-        // assume it should be posted to user's wall if not set other wise
         destination,
       });
 
