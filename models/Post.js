@@ -13,14 +13,10 @@ const PostSchema = new Schema({
   },
   destination: {
     type: ObjectId, // User who received the post(whose wall?)
-<<<<<<< HEAD
     // assume it should be posted to user's wall if not set other wise
     default() {
       return this.user;
     },
-=======
-    required: true,
->>>>>>> Updated Models
     ref: "User",
   },
   typeOfPost: {
@@ -41,7 +37,6 @@ const PostSchema = new Schema({
     ref: "User",
   },
   edited: { type: Boolean, default: false },
-<<<<<<< HEAD
   lastEditedDate: {
     type: Number,
     default: null,
@@ -50,9 +45,6 @@ const PostSchema = new Schema({
       return this.edited;
     },
   },
-=======
-  lastEditedDate: { type: Number, default: null },
->>>>>>> Updated Models
   comments: { type: [Comment.schema], default: [] },
 });
 
