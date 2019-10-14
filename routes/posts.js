@@ -8,7 +8,7 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 
 // GET POSTS BY USERNAME
-router.get("/user/:username", async (req, res, next) => {
+router.get("/:username", async (req, res, next) => {
   try {
     const { username } = req.params;
 
@@ -24,20 +24,19 @@ router.get("/user/:username", async (req, res, next) => {
       .or([{ user: user._id }, { destination: user._id }])
       .select("-__v");
 
-    const { recent, sortBy } = req.query;
+    const { recent } = req.query;
 
     if (+recent) {
       postsQuery.sort({ creationDate: -1 }).limit(+recent);
     }
 
-    if (sortBy) {
-      postsQuery.sort({ [sortBy]: -1 });
-    }
-
     populatePostField(postsQuery);
 
     const posts = await postsQuery;
-    return res.json(posts);
+    return res.json({
+      success: true,
+      posts,
+    });
   } catch (err) {
     return next(err);
   }
@@ -80,7 +79,10 @@ router.get("/", async (req, res, next) => {
     populatePostField(postsQuery);
 
     const posts = await postsQuery;
-    return res.json(posts);
+    return res.json({
+      success: true,
+      posts,
+    });
   } catch (err) {
     return next(err);
   }
@@ -100,7 +102,7 @@ router.post(
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success: false, errors: errors.array() });
       }
 
       const { _id } = req.user;
@@ -117,7 +119,10 @@ router.post(
 
       post = await populatePostField(post).execPopulate();
 
-      return res.json(post);
+      return res.json({
+        success: true,
+        post,
+      });
     } catch (err) {
       return next(err);
     }
@@ -158,7 +163,10 @@ router.patch(
       }
       post = await populatePostField(post).execPopulate();
 
-      return res.json(post);
+      return res.json({
+        success: true,
+        post,
+      });
     } catch (err) {
       return next(err);
     }
@@ -221,8 +229,9 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 // Global Error Handling Middleware
-router.use((err, req, res) => {
-  console.error(err);
+/* eslint no-unused-vars: "off" */
+// middleware needs 4 params to be an error handling middleware even if all the params are not used
+router.use((err, req, res, next) => {
   return res.status(500).json({
     success: false,
     msg: "Internal Server Error",
