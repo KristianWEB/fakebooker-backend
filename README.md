@@ -1,7 +1,3 @@
-# Backend
-
-[![Build Status](https://travis-ci.com/open-source-developers/back-end.svg?branch=master)](https://travis-ci.com/open-source-developers/back-end)
-
 ### API Specification Draft #1
 
 This is the api specification draft. This includes all the tentative endpoints, their HTTP methods, request bodies, response bodies, headers and other related information useful for developing api's on the backend and also consuming api's on the frontend.
