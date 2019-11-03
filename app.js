@@ -32,9 +32,4 @@ app.get("/test", (req, res) => {
   res.send({ data: "hello from test endpoint" });
 });
 
-app.get("*", (req, res) => {
-  res.send("Invalid Endpoint");
-  res.end();
-});
-
 module.exports = app;
