@@ -1,7 +1,10 @@
-const helloResolver = require("./hello");
+const usersResolvers = require("./users");
 
 module.exports = {
   Query: {
-    ...helloResolver.Query,
+    ...usersResolvers.Query,
+  },
+  Mutation: {
+    ...usersResolvers.Mutation,
   },
 };
