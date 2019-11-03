@@ -1,62 +1,67 @@
+const jwt = require("jsonwebtoken");
+const props = require("../../config/properties");
+
+const secret = props.JWT_SECRET;
+
 const User = require("../../models/User");
 
-// np xD
 module.exports = {
   Mutation: {
     register: async (
       _,
-      { registerInput: { username, email, password } },
-      { _req, res }
+      { registerInput: { username, email, password, displayName } }
     ) => {
+      const newUser = new User({
+        email,
+        password,
+        username,
+        displayName,
+      });
+      // check if username or email is already taken
       try {
-        const errors = {};
-        let newUser = await User.findByEmail(newUser.email);
-        if (newUser) errors.email = `User already exists with email`;
-
-        newUser = await User.findByUsername(username);
-        if (newUser) errors.username = `User already exists with username`;
-
+        const errors = [];
+        let user = await User.findByEmail(newUser.email);
+        if (user) errors.push(`User already exists with email`);
+        user = await User.findByUsername(newUser.username);
+        if (user) errors.push(`User already exists with username`);
         if (Object.keys(errors).length > 0) {
-          return res.status(409).json({
-            success: false,
+          return {
             errors,
-          });
+          };
         }
-
-        const savedUser = await newUser.add();
-
+        // const savedUser = await newUser.add();
         const token = jwt.sign(jwtData(newUser), secret, {
           expiresIn: 604800, // 1 week
         });
-
-        return res.json({
-          success: true,
-          msg: "User registered",
-          token: `JWT ${token}`,
+        return {
+          // success: true,
+          // msg: "User registered",
           user: {
-            id: savedUser._id,
-            email: savedUser.email,
-            username: savedUser.username,
+            token: `JWT ${token}`,
+            // id: savedUser._id,
+            email: newUser.email,
+            username: newUser.username,
+            displayName: newUser.displayName,
+            coverImage: "https://www.w3schools.com/w3images/avatar2.png",
+            status: {
+              isDeactivated: false,
+              lastActiveDate: Date.now().toString(),
+            },
           },
-        });
+        };
       } catch (err) {
-        return res.status(409).json({
-          success: false,
-          msg: "Some error occurred while registering the user",
-        });
+        return {
+          errors: ["Some error occurred while registering the user"],
+        };
       }
-      return {
-        username,
-        email,
-        password,
-        displayName: "Bob",
-        token: "Dummy",
-        coverImage: "",
-        statusValue: {
-          isDeactivated: false,
-          lastActiveDate: Date.now(),
-        },
-      };
     },
   },
 };
+
+const jwtData = user => ({
+  roles: user.roles,
+  _id: user._id,
+  email: user.email,
+  username: user.username,
+  displayName: user.displayName,
+});

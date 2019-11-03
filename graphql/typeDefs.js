@@ -3,13 +3,12 @@ const { gql } = require("apollo-server-express");
 module.exports = gql`
   type Query {
     hello: String!
-    # query user?
-    # getUser(id: String): User
+    # user(id: String): User
   }
 
   type statusValue {
     isDeactivated: Boolean
-    lastActiveDate: Int
+    lastActiveDate: String
   }
 
   type User {
@@ -24,9 +23,19 @@ module.exports = gql`
     username: String!
     email: String!
     password: String!
+    displayName: String!
+  }
+
+  type Error {
+    message: String
+  }
+
+  type RegisterResponse {
+    errors: [Error]
+    user: User
   }
 
   type Mutation {
-    register(registerInput: RegisterInput): User!
+    register(registerInput: RegisterInput): RegisterResponse
   }
 `;
