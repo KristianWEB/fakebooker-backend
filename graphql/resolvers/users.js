@@ -1,67 +1,75 @@
+const { UserInputError } = require("apollo-server-express");
 const jwt = require("jsonwebtoken");
 const props = require("../../config/properties");
 
 const secret = props.JWT_SECRET;
 
 const User = require("../../models/User");
+const { validateRegisterInput } = require("../../util/validators");
+
+const generateToken = user => {
+  return jwt.sign(
+    {
+      roles: user.roles,
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+    },
+    secret,
+    {
+      expiresIn: 604800,
+    }
+  );
+};
 
 module.exports = {
   Mutation: {
     register: async (
       _,
-      { registerInput: { username, email, password, displayName } }
+      { registerInput: { username, email, password, confirmPassword } }
     ) => {
+      const { valid, errors } = validateRegisterInput(
+        username,
+        email,
+        password,
+        confirmPassword
+      );
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      // check if username or email is already taken
+      let user = await User.findByUsername(username);
+      if (user) {
+        throw new UserInputError("Username is taken", {
+          errors: {
+            username: "This username is taken",
+          },
+        });
+      }
+      user = await User.findByEmail(email);
+      if (user) {
+        throw new UserInputError("Email is taken", {
+          errors: {
+            email: "This email is taken",
+          },
+        });
+      }
+
       const newUser = new User({
         email,
         password,
         username,
-        displayName,
       });
-      // check if username or email is already taken
-      try {
-        const errors = [];
-        let user = await User.findByEmail(newUser.email);
-        if (user) errors.push(`User already exists with email`);
-        user = await User.findByUsername(newUser.username);
-        if (user) errors.push(`User already exists with username`);
-        if (Object.keys(errors).length > 0) {
-          return {
-            errors,
-          };
-        }
-        // const savedUser = await newUser.add();
-        const token = jwt.sign(jwtData(newUser), secret, {
-          expiresIn: 604800, // 1 week
-        });
-        return {
-          // success: true,
-          // msg: "User registered",
-          user: {
-            token: `JWT ${token}`,
-            // id: savedUser._id,
-            email: newUser.email,
-            username: newUser.username,
-            displayName: newUser.displayName,
-            coverImage: "https://www.w3schools.com/w3images/avatar2.png",
-            status: {
-              isDeactivated: false,
-              lastActiveDate: Date.now().toString(),
-            },
-          },
-        };
-      } catch (err) {
-        return {
-          errors: ["Some error occurred while registering the user"],
-        };
-      }
+      const token = generateToken(newUser);
+
+      const savedUser = await newUser.add();
+      return {
+        ...savedUser._doc,
+        id: savedUser._id,
+        token,
+      };
     },
   },
 };
-
-const jwtData = user => ({
-  roles: user.roles,
-  _id: user._id,
-  email: user.email,
-  username: user.username,
-  displayName: user.displayName,
-});

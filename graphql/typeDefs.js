@@ -23,19 +23,10 @@ module.exports = gql`
     username: String!
     email: String!
     password: String!
-    displayName: String!
-  }
-
-  type Error {
-    message: String
-  }
-
-  type RegisterResponse {
-    errors: [Error]
-    user: User
+    confirmPassword: String!
   }
 
   type Mutation {
-    register(registerInput: RegisterInput): RegisterResponse
+    register(registerInput: RegisterInput): User!
   }
 `;
