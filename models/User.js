@@ -27,7 +27,7 @@ const UserSchema = new Schema({
     dob: Number,
     bio: String,
   },
-  password: { required: true, type: String, select: false },
+  password: { required: true, type: String },
   roles: { type: Array, default: ["user"] },
   posts: { type: [Post.schema], required: true },
 });

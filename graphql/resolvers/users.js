@@ -1,11 +1,15 @@
 const { UserInputError } = require("apollo-server-express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const props = require("../../config/properties");
 
 const secret = props.JWT_SECRET;
 
 const User = require("../../models/User");
-const { validateRegisterInput } = require("../../util/validators");
+const {
+  validateRegisterInput,
+  validateLoginInput,
+} = require("../../util/validators");
 
 const generateToken = user => {
   return jwt.sign(
@@ -24,6 +28,33 @@ const generateToken = user => {
 
 module.exports = {
   Mutation: {
+    login: async (_, { email, password }) => {
+      const { errors, valid } = validateLoginInput(email, password);
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      const user = await User.findByEmail(email);
+
+      if (!user) {
+        errors.general = "User not found";
+        throw new UserInputError("User not found", { errors });
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        errors.general = "Wrong crendetials";
+        throw new UserInputError("Wrong crendetials", { errors });
+      }
+
+      const token = generateToken(user);
+
+      return {
+        ...user._doc,
+        token,
+      };
+    },
     register: async (
       _,
       { registerInput: { username, email, password, confirmPassword } }
@@ -67,7 +98,6 @@ module.exports = {
       const savedUser = await newUser.add();
       return {
         ...savedUser._doc,
-        id: savedUser._id,
         token,
       };
     },
