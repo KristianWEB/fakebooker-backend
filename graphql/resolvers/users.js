@@ -11,6 +11,8 @@ const {
   validateLoginInput,
 } = require("../../util/validators");
 
+const getAuthenticatedUser = require("../middlewares/authenticated");
+
 const generateToken = user => {
   return jwt.sign(
     {
@@ -18,6 +20,12 @@ const generateToken = user => {
       _id: user._id,
       email: user.email,
       username: user.username,
+      displayName: user.displayName,
+      coverImage: user.coverImage,
+      status: {
+        isDeactivated: user.status.isDeactivated,
+        lastActiveDate: user.status.lastActiveDate,
+      },
     },
     secret,
     {
@@ -27,6 +35,15 @@ const generateToken = user => {
 };
 
 module.exports = {
+  Query: {
+    loadUser: (_, __, context) => {
+      const { user, token } = getAuthenticatedUser(context);
+      return {
+        ...user,
+        token,
+      };
+    },
+  },
   Mutation: {
     login: async (_, { email, password }) => {
       const { errors, valid } = validateLoginInput(email, password);
