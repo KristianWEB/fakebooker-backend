@@ -14,6 +14,7 @@ module.exports = context => {
       user = jwt.verify(token, secret);
     }
   }
+
   return {
     token,
     user,

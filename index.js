@@ -13,7 +13,7 @@ const port = props.PORT;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req, res, next }) => ({ req, res, next }),
+  context: async ({ req }) => ({ req }),
 });
 
 server.applyMiddleware({ app });

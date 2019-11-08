@@ -38,9 +38,12 @@ module.exports = {
   Query: {
     loadUser: (_, __, context) => {
       const { user, token } = getAuthenticatedUser(context);
+      if (!user) {
+        throw new Error("Unauthenticated!");
+      }
       return {
-        ...user,
         token,
+        ...user,
       };
     },
   },
