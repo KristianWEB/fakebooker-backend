@@ -1,11 +1,6 @@
 const { gql } = require("apollo-server-express");
 
 module.exports = gql`
-  type Query {
-    hello: String!
-    loadUser: User
-  }
-
   type statusValue {
     isDeactivated: Boolean
     lastActiveDate: String
@@ -25,7 +20,21 @@ module.exports = gql`
     password: String!
     confirmPassword: String!
   }
-
+  type PostValue {
+    # right now this is returning the whole user with the token which isn't really cool so this is going to be refactored in the future!!
+    posts: [Post]!
+    author: User!
+  }
+  type Post {
+    id: ID!
+    content: String!
+    creationDate: String!
+  }
+  type Query {
+    hello: String!
+    loadUser: User
+    getPosts(username: String!): PostValue
+  }
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
