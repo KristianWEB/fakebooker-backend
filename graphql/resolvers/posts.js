@@ -4,15 +4,23 @@
 // const props = require("../../config/properties");
 
 const Post = require("../../models/Post");
+const User = require("../../models/User");
 
 // const getAuthenticatedUser = require("../middlewares/authenticated");
 
 module.exports = {
   Query: {
-    getPost: async (_, { username }) => {
+    getPosts: async (_, { username }) => {
       try {
-        const posts = await Post.find({ username }).sort({ createdAt: -1 });
-        return posts;
+        const user = await User.findByUsername(username);
+        if (!user) {
+          throw new Error("There is no user by that username");
+        }
+
+        const posts = await Post.find({ user: user._id }).sort({
+          createdAt: -1,
+        });
+        return { posts, author: user };
       } catch (err) {
         throw new Error(err);
       }
