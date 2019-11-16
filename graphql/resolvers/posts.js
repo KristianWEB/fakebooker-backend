@@ -6,7 +6,7 @@
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 
-// const getAuthenticatedUser = require("../middlewares/authenticated");
+const getAuthenticatedUser = require("../middlewares/authenticated");
 
 module.exports = {
   Query: {
@@ -24,6 +24,21 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
+    },
+  },
+  Mutation: {
+    createPost: async (_, { content }, context) => {
+      const { user } = getAuthenticatedUser(context);
+      if (!user) {
+        throw new Error("Unauthenticated!");
+      }
+      const newPost = new Post({
+        content,
+        user: user._id,
+      });
+
+      const post = await newPost.save();
+      return post;
     },
   },
 };
