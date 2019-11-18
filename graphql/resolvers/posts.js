@@ -22,7 +22,7 @@ module.exports = {
     },
   },
   Mutation: {
-    createPost: async (_, { content, username }, context) => {
+    createPost: async (_, { content }, context) => {
       const { user } = getAuthenticatedUser(context);
       if (!user) {
         throw new Error("Unauthenticated!");
@@ -30,9 +30,11 @@ module.exports = {
       const newPost = new Post({
         content,
         user: user._id,
-        username,
+        author: {
+          username: user.username,
+          coverImage: user.coverImage,
+        },
       });
-
       const post = await newPost.save();
       return post;
     },

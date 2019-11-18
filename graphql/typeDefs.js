@@ -20,15 +20,21 @@ module.exports = gql`
     password: String!
     confirmPassword: String!
   }
+
   # type PostValue {
   #   # right now this is returning the whole user with the token which isn't really cool so this is going to be refactored in the future!!
   #   # posts: [Post]!
   #   # author: User!
   # }
+
+  type AuthorValue {
+    username: String!
+    coverImage: String!
+  }
   type Post {
     id: ID!
     user: String!
-    username: String!
+    author: AuthorValue!
     content: String!
     creationDate: String!
   }
@@ -41,6 +47,6 @@ module.exports = gql`
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
-    createPost(content: String!, username: String!): Post!
+    createPost(content: String!): Post!
   }
 `;
