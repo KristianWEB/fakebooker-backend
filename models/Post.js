@@ -25,6 +25,7 @@ const PostSchema = new Schema({
     default: "text",
   },
   content: { type: String, required: true },
+  username: { type: String, required: true },
   creationDate: { type: Number, default: Date.now },
   likedBy: {
     type: [ObjectId],

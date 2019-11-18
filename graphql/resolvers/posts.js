@@ -1,12 +1,7 @@
-// const { AuthenticationError } = require("apollo-server-express");
-// const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
-// const props = require("../../config/properties");
-
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 
-// const getAuthenticatedUser = require("../middlewares/authenticated");
+const getAuthenticatedUser = require("../middlewares/authenticated");
 
 module.exports = {
   Query: {
@@ -18,12 +13,28 @@ module.exports = {
         }
 
         const posts = await Post.find({ user: user._id }).sort({
-          createdAt: -1,
+          creationDate: -1,
         });
-        return { posts, author: user };
+        return posts;
       } catch (err) {
         throw new Error(err);
       }
+    },
+  },
+  Mutation: {
+    createPost: async (_, { content, username }, context) => {
+      const { user } = getAuthenticatedUser(context);
+      if (!user) {
+        throw new Error("Unauthenticated!");
+      }
+      const newPost = new Post({
+        content,
+        user: user._id,
+        username,
+      });
+
+      const post = await newPost.save();
+      return post;
     },
   },
 };
