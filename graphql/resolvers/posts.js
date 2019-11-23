@@ -35,7 +35,6 @@ module.exports = {
           coverImage: user.coverImage,
         },
       });
-      });
       const post = await newPost.save();
       return post;
     },
