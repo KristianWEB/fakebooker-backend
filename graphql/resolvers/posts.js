@@ -1,8 +1,3 @@
-// const { AuthenticationError } = require("apollo-server-express");
-// const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
-// const props = require("../../config/properties");
-
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 
@@ -18,9 +13,9 @@ module.exports = {
         }
 
         const posts = await Post.find({ user: user._id }).sort({
-          createdAt: -1,
+          creationDate: -1,
         });
-        return { posts, author: user };
+        return posts;
       } catch (err) {
         throw new Error(err);
       }
@@ -35,8 +30,11 @@ module.exports = {
       const newPost = new Post({
         content,
         user: user._id,
+        author: {
+          username: user.username,
+          coverImage: user.coverImage,
+        },
       });
-
       const post = await newPost.save();
       return post;
     },

@@ -11,6 +11,10 @@ const PostSchema = new Schema({
     required: true,
     ref: "User",
   },
+  author: {
+    username: { type: String, required: true },
+    coverImage: { type: String, required: true },
+  },
   destination: {
     type: ObjectId, // User who received the post(whose wall?)
     // assume it should be posted to user's wall if not set other wise
