@@ -48,5 +48,6 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     createPost(content: String!): Post!
+    createComment(postId: String!, body: String!): Post!
   }
 `;
