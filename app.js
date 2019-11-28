@@ -5,7 +5,6 @@ const app = express();
 // Const path = require('path');
 const volleyball = require("volleyball");
 const cors = require("cors");
-const passport = require("passport");
 
 const connectDB = require("./config/database");
 
@@ -19,14 +18,6 @@ app.use(express.json());
 
 // Cors Middleware
 app.use(cors());
-
-// Passport Middleware
-app.use(passport.initialize());
-require("./config/passport")(passport);
-
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/profile", require("./routes/profile"));
-app.use("/api/posts", require("./routes/posts"));
 
 app.get("/test", (req, res) => {
   res.send({ data: "hello from test endpoint" });
