@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-const Comment = require("./Comment");
+const CommentSchema = new Schema({
+  username: String,
+  body: String,
+  createdAt: String,
+});
 
 const PostSchema = new Schema({
   user: {
@@ -49,7 +53,10 @@ const PostSchema = new Schema({
       return this.edited;
     },
   },
-  comments: { type: [Comment.schema], default: [] },
+  comments: {
+    type: [CommentSchema],
+    default: [],
+  },
 });
 
 const Post = mongoose.model("Post", PostSchema);
