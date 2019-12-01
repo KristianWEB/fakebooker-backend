@@ -7,6 +7,7 @@ module.exports = gql`
   }
 
   type User {
+    id: ID
     username: String!
     token: String!
     email: String!
@@ -37,6 +38,14 @@ module.exports = gql`
     author: AuthorValue!
     content: String!
     creationDate: String!
+    comments: [Comment]!
+  }
+
+  type Comment {
+    id: ID!
+    createdAt: String!
+    username: String!
+    body: String!
   }
 
   type Query {
@@ -48,6 +57,7 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     createPost(content: String!): Post!
-    createComment(postId: String!, body: String!): Post!
+    createComment(postId: ID!, body: String!): Post!
+    deleteComment(postId: ID!, commentId: ID!): Post!
   }
 `;

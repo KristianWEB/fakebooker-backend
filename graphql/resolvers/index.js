@@ -1,7 +1,7 @@
 const testResolvers = require("./hello");
 const usersResolvers = require("./users");
 const postsResolvers = require("./posts");
-const commentsResolvers = require("./comments");//28.11.2019
+const commentsResolvers = require("./comments");
 
 module.exports = {
   Query: {
@@ -12,6 +12,6 @@ module.exports = {
   Mutation: {
     ...usersResolvers.Mutation,
     ...postsResolvers.Mutation,
-    ...commentsResolvers,//28.11.2019 
+    ...commentsResolvers.Mutation,
   },
 };
