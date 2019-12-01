@@ -7,6 +7,7 @@ module.exports = gql`
   }
 
   type User {
+    id: ID
     username: String!
     token: String!
     email: String!
@@ -21,22 +22,25 @@ module.exports = gql`
     confirmPassword: String!
   }
 
-  # type PostValue {
-  #   # right now this is returning the whole user with the token which isn't really cool so this is going to be refactored in the future!!
-  #   # posts: [Post]!
-  #   # author: User!
-  # }
-
   type AuthorValue {
     username: String!
     coverImage: String!
   }
   type Post {
     id: ID!
-    user: String!
+    userId: String!
     author: AuthorValue!
     content: String!
     creationDate: String!
+    comments: [Comment]!
+  }
+
+  type Comment {
+    id: ID!
+    userId: String!
+    createdAt: String!
+    author: AuthorValue!
+    body: String!
   }
 
   type Query {
@@ -48,5 +52,7 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     createPost(content: String!): Post!
+    createComment(postId: ID!, body: String!): Post!
+    deleteComment(postId: ID!, commentId: ID!): Post!
   }
 `;

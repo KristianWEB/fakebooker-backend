@@ -3,10 +3,23 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-const Comment = require("./Comment");
+const CommentSchema = new Schema({
+  username: String,
+  body: String,
+  createdAt: String,
+  userId: {
+    type: ObjectId,
+    required: true,
+    ref: "User",
+  },
+  author: {
+    username: { type: String, required: true },
+    coverImage: { type: String, required: true },
+  },
+});
 
 const PostSchema = new Schema({
-  user: {
+  userId: {
     type: ObjectId,
     required: true,
     ref: "User",
@@ -19,7 +32,7 @@ const PostSchema = new Schema({
     type: ObjectId, // User who received the post(whose wall?)
     // assume it should be posted to user's wall if not set other wise
     default() {
-      return this.user;
+      return this.author.userId;
     },
     ref: "User",
   },
@@ -30,16 +43,6 @@ const PostSchema = new Schema({
   },
   content: { type: String, required: true },
   creationDate: { type: Number, default: Date.now },
-  likedBy: {
-    type: [ObjectId],
-    default: [],
-    ref: "User",
-  },
-  disLikedBy: {
-    type: [ObjectId],
-    default: [],
-    ref: "User",
-  },
   edited: { type: Boolean, default: false },
   lastEditedDate: {
     type: Number,
@@ -49,7 +52,10 @@ const PostSchema = new Schema({
       return this.edited;
     },
   },
-  comments: { type: [Comment.schema], default: [] },
+  comments: {
+    type: [CommentSchema],
+    default: [],
+  },
 });
 
 const Post = mongoose.model("Post", PostSchema);
