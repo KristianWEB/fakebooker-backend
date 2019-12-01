@@ -9,7 +9,6 @@ module.exports = {
       if (!user) {
         throw new Error("Unauthenticated!");
       }
-      console.log(postId);
 
       if (body.trim() === "") {
         throw new Error("Comment can't be empty!");
@@ -19,7 +18,11 @@ module.exports = {
       if (post) {
         post.comments.unshift({
           body,
-          username: user.username,
+          userId: user._id,
+          author: {
+            username: user.username,
+            coverImage: user.coverImage,
+          },
           createdAt: new Date().toISOString(),
         });
         post = post.save();
