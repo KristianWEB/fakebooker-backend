@@ -12,7 +12,7 @@ module.exports = {
           throw new Error("There is no user by that username");
         }
 
-        const posts = await Post.find({ user: user._id }).sort({
+        const posts = await Post.find({ userId: user._id }).sort({
           creationDate: -1,
         });
         return posts;
@@ -27,9 +27,10 @@ module.exports = {
       if (!user) {
         throw new Error("Unauthenticated!");
       }
+
       const newPost = new Post({
         content,
-        user: user._id,
+        userId: user._id,
         author: {
           username: user.username,
           coverImage: user.coverImage,
