@@ -113,9 +113,9 @@ module.exports = {
         password,
         username,
       });
-      const token = generateToken(newUser);
-
       const savedUser = await newUser.add();
+
+      const token = generateToken(newUser);
       return {
         ...savedUser._doc,
         token,
