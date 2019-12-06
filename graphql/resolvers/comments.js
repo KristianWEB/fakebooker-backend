@@ -16,7 +16,7 @@ module.exports = {
 
       let post = await Post.findOne({ _id: postId });
       if (post) {
-        post.comments.unshift({
+        post.comments.push({
           body,
           userId: user._id,
           author: {
