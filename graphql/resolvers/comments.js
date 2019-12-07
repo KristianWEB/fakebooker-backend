@@ -46,7 +46,7 @@ module.exports = {
         throw new Error("Action not allowed");
       } else {
         throw new Error("Post not found");
-      }//
+      }
     },
   },
 };
