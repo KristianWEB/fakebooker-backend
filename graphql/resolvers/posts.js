@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 const { AuthenticationError } = require("apollo-server-express");
-=======
 const  {UserInputError} = require("apollo-server-express");
 
->>>>>>> added implementation of likePost() function under posts.js under resolvers
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 const getAuthenticatedUser = require("../middlewares/authenticated");
