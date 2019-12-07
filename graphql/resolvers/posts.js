@@ -40,9 +40,9 @@ module.exports = {
       const post = await newPost.save();
       return post;
     },
+
     likePost: async (_, { postId }, context) => {
       const { username } = getAuthenticatedUser(context);
-
       const post = await Post.findById(postId);
       if (post) {
         if (post.likes.find(like => like.username === username)) {
@@ -53,26 +53,6 @@ module.exports = {
           post.likes.push({
             username,
             creationDate: new Date().toISOString(),
-          });
-        }
-
-        await post.save();
-        return post;
-      }
-      throw new UserInputError("Post Not Found");
-    },
-    likePost: async (_, { postId }, context) => {
-      const { username } = getAuthenticatedUser(context);
-      const post = await Post.findById(postId);
-      if (post) {
-        if (post.likes.find(like => like.username === username)) {
-          // post was already liked
-          post.likes = post.likes.filter(like => like.username !== username);
-        } else {
-          // not liked post
-          post.likes.push({
-            username,
-            createdAt: new Date().toISOString(),
           });
         }
 
