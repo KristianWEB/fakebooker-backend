@@ -23,7 +23,7 @@ module.exports = {
             username: user.username,
             coverImage: user.coverImage,
           },
-          createdAt: new Date().toISOString(),
+          creationDate: new Date().toISOString(),
         });
         post = post.save();
         return post;

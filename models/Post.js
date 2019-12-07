@@ -18,6 +18,11 @@ const CommentSchema = new Schema({
   },
 });
 
+const LikeSchema = new Schema({
+  username: String,
+  creationDate: String,
+});
+
 const PostSchema = new Schema({
   userId: {
     type: ObjectId,
@@ -54,6 +59,11 @@ const PostSchema = new Schema({
   },
   comments: {
     type: [CommentSchema],
+    default: [],
+  },
+
+  likes: {
+    type: [LikeSchema],
     default: [],
   },
 });

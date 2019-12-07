@@ -40,7 +40,7 @@ module.exports = {
       const post = await newPost.save();
       return post;
     },
-    async likePost(_, { postId }, context) {
+    likePost: async (_, { postId }, context) => {
       const { username } = getAuthenticatedUser(context);
 
       const post = await Post.findById(postId);
@@ -52,7 +52,7 @@ module.exports = {
           // not liked post
           post.likes.push({
             username,
-            createdAt: new Date().toISOString(),
+            creationDate: new Date().toISOString(),
           });
         }
 

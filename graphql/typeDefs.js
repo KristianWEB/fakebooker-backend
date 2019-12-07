@@ -39,14 +39,14 @@ module.exports = gql`
   type Comment {
     id: ID!
     userId: String!
-    createdAt: String!
+    creationDate: String!
     author: AuthorValue!
     body: String!
   }
 
   type Like {
     id: ID!
-    createdAt: String!
+    creationDate: String!
     username: String!
   }
 
