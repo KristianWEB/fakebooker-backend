@@ -41,7 +41,7 @@ module.exports = {
       return post;
     },
     deletePost: async (_, { postId }, context) => {
-      const user = getAuthenticatedUser(context);
+      const { user } = getAuthenticatedUser(context);
 
       try {
         const post = await Post.findById(postId);
