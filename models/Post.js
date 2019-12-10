@@ -6,7 +6,7 @@ const { ObjectId } = Schema.Types;
 const CommentSchema = new Schema({
   username: String,
   body: String,
-  createdAt: String,
+  creationDate: String,
   userId: {
     type: ObjectId,
     required: true,
@@ -16,6 +16,11 @@ const CommentSchema = new Schema({
     username: { type: String, required: true },
     coverImage: { type: String, required: true },
   },
+});
+
+const LikeSchema = new Schema({
+  username: { type: String, required: true },
+  creationDate: { type: String, required: true },
 });
 
 const PostSchema = new Schema({
@@ -54,6 +59,11 @@ const PostSchema = new Schema({
   },
   comments: {
     type: [CommentSchema],
+    default: [],
+  },
+
+  likes: {
+    type: [LikeSchema],
     default: [],
   },
 });

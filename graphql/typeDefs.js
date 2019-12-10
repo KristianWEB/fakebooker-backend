@@ -33,14 +33,21 @@ module.exports = gql`
     content: String!
     creationDate: String!
     comments: [Comment]!
+    likes: [Like]!
   }
 
   type Comment {
     id: ID!
     userId: String!
-    createdAt: String!
+    creationDate: String!
     author: AuthorValue!
     body: String!
+  }
+
+  type Like {
+    id: ID!
+    creationDate: String!
+    username: String!
   }
 
   type Query {
@@ -55,5 +62,6 @@ module.exports = gql`
     deletePost(postId: ID!): String!
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
+    likePost(postId: String!, username: String!): Post!
   }
 `;
