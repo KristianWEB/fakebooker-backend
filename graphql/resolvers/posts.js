@@ -58,16 +58,18 @@ module.exports = {
       }
     },
     likePost: async (_, { postId }, context) => {
-      const { username } = getAuthenticatedUser(context);
+      const { user } = getAuthenticatedUser(context);
       const post = await Post.findById(postId);
       if (post) {
-        if (post.likes.find(like => like.username === username)) {
+        if (post.likes.find(like => like.username === user.username)) {
           // post was already liked
-          post.likes = post.likes.filter(like => like.username !== username);
+          post.likes = post.likes.filter(
+            like => like.username !== user.username
+          );
         } else {
           // not liked post
           post.likes.push({
-            username,
+            username: user.username,
             creationDate: new Date().toISOString(),
           });
         }
