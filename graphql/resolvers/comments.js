@@ -1,4 +1,9 @@
 const Post = require("../../models/Post");
+const { PubSub } = require("apollo-server");
+const Comment = require("../../models/Comment");
+
+const pubsub = new PubSub();
+const COMMENT_ADDED = "COMMENT_ADDED";
 
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
@@ -12,11 +17,12 @@ module.exports = {
 
       if (body.trim() === "") {
         throw new Error("Comment can't be empty!");
+        F;
       }
 
       let post = await Post.findOne({ _id: postId });
       if (post) {
-        post.comments.push({
+        let comment = new Comment({
           body,
           userId: user._id,
           author: {
@@ -25,7 +31,9 @@ module.exports = {
           },
           creationDate: new Date().toISOString(),
         });
+        post.comments.push(comment);
         post = post.save();
+        pubsub.publish(COMMENT_ADDED, { comment });
         return post;
       }
       throw new Error("Post not found");
@@ -47,6 +55,11 @@ module.exports = {
       } else {
         throw new Error("Post not found");
       }
+    },
+  },
+  Subscription: {
+    commentAdded: {
+      subscribe: () => pubsub.asyncIterator(COMMENT_ADDED),
     },
   },
 };

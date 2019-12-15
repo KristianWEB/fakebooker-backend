@@ -18,4 +18,7 @@ module.exports = {
     ...postsResolvers.Mutation,
     ...commentsResolvers.Mutation,
   },
+  Subscription: {
+    ... commentsResolvers.Subscription
+  }
 };
