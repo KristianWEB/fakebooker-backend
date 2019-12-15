@@ -17,7 +17,6 @@ module.exports = {
 
       if (body.trim() === "") {
         throw new Error("Comment can't be empty!");
-        ;
       }
 
       let post = await Post.findOne({ _id: postId });
