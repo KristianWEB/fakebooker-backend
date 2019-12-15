@@ -1,6 +1,10 @@
+const { PubSub } = require("apollo-server");
 const Post = require("../../models/Post");
-
 const getAuthenticatedUser = require("../middlewares/authenticated");
+
+const NEW_COMMENT = "NEW_COMMENT";
+
+const pubsub = new PubSub();
 
 module.exports = {
   Mutation: {
@@ -25,6 +29,11 @@ module.exports = {
           },
           creationDate: new Date().toISOString(),
         });
+
+        pubsub.publish(NEW_COMMENT, {
+          newComment: post.comments[post.comments.length - 1],
+        });
+
         post = post.save();
         return post;
       }
@@ -47,6 +56,11 @@ module.exports = {
       } else {
         throw new Error("Post not found");
       }
+    },
+  },
+  Subscription: {
+    newComment: {
+      subscribe: () => pubsub.asyncIterator(NEW_COMMENT),
     },
   },
 };

@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require("apollo-server");
 
 module.exports = gql`
   type statusValue {
@@ -65,5 +65,9 @@ module.exports = gql`
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
+  }
+
+  type Subscription {
+    newComment: Comment!
   }
 `;
