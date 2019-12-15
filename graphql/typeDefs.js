@@ -32,7 +32,7 @@ module.exports = gql`
     author: AuthorValue!
     content: String!
     creationDate: String!
-    # comments: [Comment]!
+    comments: [Comment]!
     likes: [Like]!
     likeCount: Int!
     commentCount: Int!
@@ -68,6 +68,6 @@ module.exports = gql`
   }
 
   type Subscription {
-    commentAdded: Comment!
+    newComment: Comment!
   }
 `;

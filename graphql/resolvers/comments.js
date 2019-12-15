@@ -1,11 +1,10 @@
 const { PubSub } = require("apollo-server");
 const Post = require("../../models/Post");
-const Comment = require("../../models/Comment");
+const getAuthenticatedUser = require("../middlewares/authenticated");
+
+const NEW_COMMENT = "NEW_COMMENT";
 
 const pubsub = new PubSub();
-const COMMENT_ADDED = "COMMENT_ADDED";
-
-const getAuthenticatedUser = require("../middlewares/authenticated");
 
 module.exports = {
   Mutation: {
@@ -21,7 +20,7 @@ module.exports = {
 
       let post = await Post.findOne({ _id: postId });
       if (post) {
-        const comment = new Comment({
+        post.comments.push({
           body,
           userId: user._id,
           author: {
@@ -30,9 +29,12 @@ module.exports = {
           },
           creationDate: new Date().toISOString(),
         });
-        post.comments.push(comment);
+
+        pubsub.publish(NEW_COMMENT, {
+          newComment: post.comments[post.comments.length - 1],
+        });
+
         post = post.save();
-        pubsub.publish(COMMENT_ADDED, { comment });
         return post;
       }
       throw new Error("Post not found");
@@ -57,8 +59,8 @@ module.exports = {
     },
   },
   Subscription: {
-    commentAdded: {
-      subscribe: () => pubsub.asyncIterator(COMMENT_ADDED),
+    newComment: {
+      subscribe: () => pubsub.asyncIterator(NEW_COMMENT),
     },
   },
 };

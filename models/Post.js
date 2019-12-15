@@ -3,7 +3,20 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-const Comment = require("./Comment");
+const CommentSchema = new Schema({
+  username: String,
+  body: String,
+  creationDate: String,
+  userId: {
+    type: ObjectId,
+    required: true,
+    ref: "User",
+  },
+  author: {
+    username: { type: String, required: true },
+    coverImage: { type: String, required: true },
+  },
+});
 
 const LikeSchema = new Schema({
   username: { type: String, required: true },
@@ -45,7 +58,7 @@ const PostSchema = new Schema({
     },
   },
   comments: {
-    type: [Comment.Schema],
+    type: [CommentSchema],
     default: [],
   },
 

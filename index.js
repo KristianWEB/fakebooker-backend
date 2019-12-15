@@ -4,7 +4,11 @@ const resolvers = require("./graphql/resolvers/index");
 // Configure dotenv
 require("dotenv").config();
 
+const props = require("./config/properties");
+
 const connectDB = require("./config/database");
+
+const port = props.PORT;
 // Connect Database
 connectDB();
 
@@ -15,6 +19,6 @@ const server = new ApolloServer({
   context: async ({ req }) => ({ req }),
 });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+server.listen(port).then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
 });
