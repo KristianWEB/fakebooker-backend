@@ -1,5 +1,5 @@
-const Post = require("../../models/Post");
 const { PubSub } = require("apollo-server");
+const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
 
 const pubsub = new PubSub();
@@ -17,12 +17,12 @@ module.exports = {
 
       if (body.trim() === "") {
         throw new Error("Comment can't be empty!");
-        F;
+        ;
       }
 
       let post = await Post.findOne({ _id: postId });
       if (post) {
-        let comment = new Comment({
+        const comment = new Comment({
           body,
           userId: user._id,
           author: {

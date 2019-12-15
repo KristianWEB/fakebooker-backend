@@ -3,7 +3,6 @@ const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers/index");
 // Configure dotenv
 require("dotenv").config();
-const props = require("./config/properties");
 
 const connectDB = require("./config/database");
 // Connect Database
