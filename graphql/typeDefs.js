@@ -50,6 +50,7 @@ module.exports = gql`
     id: ID!
     creationDate: String!
     username: String!
+    coverImage: String!
   }
 
   type Query {
@@ -69,5 +70,6 @@ module.exports = gql`
 
   type Subscription {
     newComment: Comment!
+    newLike: Like!
   }
 `;

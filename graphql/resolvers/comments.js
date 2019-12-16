@@ -18,7 +18,7 @@ module.exports = {
         throw new Error("Comment can't be empty!");
       }
 
-      let post = await Post.findOne({ _id: postId });
+      const post = await Post.findOne({ _id: postId });
       if (post) {
         post.comments.push({
           body,
@@ -34,7 +34,7 @@ module.exports = {
           newComment: post.comments[post.comments.length - 1],
         });
 
-        post = post.save();
+        await post.save();
         return post;
       }
       throw new Error("Post not found");

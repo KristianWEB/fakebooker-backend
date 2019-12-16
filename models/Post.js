@@ -21,6 +21,7 @@ const CommentSchema = new Schema({
 const LikeSchema = new Schema({
   username: { type: String, required: true },
   creationDate: { type: String, required: true },
+  coverImage: { type: String, required: true },
 });
 
 const PostSchema = new Schema({
