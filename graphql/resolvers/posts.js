@@ -1,8 +1,16 @@
-const { AuthenticationError, UserInputError } = require("apollo-server");
+const {
+  AuthenticationError,
+  UserInputError,
+  PubSub,
+} = require("apollo-server");
 
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 const getAuthenticatedUser = require("../middlewares/authenticated");
+
+const NEW_LIKE = "NEW_LIKE";
+
+const pubsub = new PubSub();
 
 module.exports = {
   Query: {
@@ -68,13 +76,23 @@ module.exports = {
           post.likes.push({
             username: user.username,
             creationDate: new Date().toISOString(),
+            coverImage: user.coverImage,
           });
         }
+
+        pubsub.publish(NEW_LIKE, {
+          newLike: post.likes[post.likes.length - 1],
+        });
 
         await post.save();
         return post;
       }
       throw new UserInputError("Post Not Found");
+    },
+  },
+  Subscription: {
+    newLike: {
+      subscribe: () => pubsub.asyncIterator(NEW_LIKE),
     },
   },
 };
