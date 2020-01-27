@@ -21,27 +21,27 @@
   },
   "homepage": "https://github.com/open-source-developers/back-end#readme",
   "dependencies": {
-    "apollo-server": "^2.9.13",
+    "apollo-server": "^2.9.16",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "dotenv": "^8.0.0",
-    "express-validator": "^6.2.0",
-    "graphql": "^14.5.8",
-    "jest": "^24.8.0",
+    "dotenv": "^8.2.0",
+    "express-validator": "^6.3.1",
+    "graphql": "^14.6.0",
+    "jest": "^25.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.8.10",
     "volleyball": "^1.5.1"
   },
   "devDependencies": {
-    "eslint": "^6.1.0",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.0",
-    "nodemon": "^1.19.2",
-    "prettier": "^1.18.2"
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
   }
 }
