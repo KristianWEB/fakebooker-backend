@@ -1,14 +1,11 @@
-const mongoose = require("mongoose");
-
-const { Schema } = mongoose;
-const { ObjectId } = Schema.Types;
+const { model, Schema } = require("mongoose");
 
 const CommentSchema = new Schema({
   username: String,
   body: String,
   creationDate: String,
   userId: {
-    type: ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
@@ -25,50 +22,28 @@ const LikeSchema = new Schema({
 });
 
 const PostSchema = new Schema({
-  userId: {
-    type: ObjectId,
-    required: true,
-    ref: "User",
-  },
   author: {
-    username: { type: String, required: true },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     coverImage: { type: String, required: true },
   },
-  destination: {
-    type: ObjectId, // User who received the post(whose wall?)
-    // assume it should be posted to user's wall if not set other wise
-    default() {
-      return this.author.userId;
-    },
-    ref: "User",
-  },
-  typeOfPost: {
-    type: String,
-    enum: ["text", "image"], // TODO: add more enum types
-    default: "text",
-  },
-  content: { type: String, required: true },
-  creationDate: { type: Number, default: Date.now },
-  edited: { type: Boolean, default: false },
-  lastEditedDate: {
-    type: Number,
-    default: null,
-    // must set lastEditedDate to something if edited is true
-    required() {
-      return this.edited;
-    },
-  },
+  body: { type: String, required: true },
+  createdAt: { type: Number, default: Date.now() },
   comments: {
     type: [CommentSchema],
     default: [],
   },
-
   likes: {
     type: [LikeSchema],
     default: [],
   },
 });
 
-const Post = mongoose.model("Post", PostSchema);
+const Post = model("Post", PostSchema);
 
 module.exports = Post;

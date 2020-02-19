@@ -27,17 +27,18 @@ module.exports = {
     },
   },
   Mutation: {
-    createPost: async (_, { content }, context) => {
+    createPost: async (_, { body }, context) => {
       const { user } = getAuthenticatedUser(context);
       if (!user) {
         throw new Error("Unauthenticated!");
       }
 
       const newPost = new Post({
-        content,
-        userId: user._id,
+        body,
         author: {
-          username: user.username,
+          userId: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
           coverImage: user.coverImage,
         },
       });
