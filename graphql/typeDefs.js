@@ -61,6 +61,7 @@ module.exports = gql`
     loadUser: User
     getPosts: [Post]
   }
+
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!

@@ -5,7 +5,6 @@ const {
 } = require("apollo-server");
 
 const Post = require("../../models/Post");
-const User = require("../../models/User");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
 const NEW_LIKE = "NEW_LIKE";
@@ -18,7 +17,7 @@ module.exports = {
       try {
         const { user } = getAuthenticatedUser(context);
 
-        const posts = await Post.find({ userId: user.id }).sort({
+        const posts = await Post.find({ "author.userId": user.id }).sort({
           creationDate: -1,
         });
         return posts;
