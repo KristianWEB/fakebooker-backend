@@ -21,8 +21,10 @@ const generateToken = user => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      birthday: user.birthday,
       coverImage: user.coverImage,
       avatarImage: user.avatarImage,
+      gender: user.gender,
     },
     secret,
     {
@@ -97,8 +99,6 @@ module.exports = {
       // if (!valid) {
       //   throw new UserInputError("Errors", { errors });
       // }
-
-      // check if username or email is already taken
 
       const user = await User.findByEmail(email);
       if (user) {
