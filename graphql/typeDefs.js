@@ -1,25 +1,25 @@
 const { gql } = require("apollo-server");
 
 module.exports = gql`
-  type statusValue {
-    isDeactivated: Boolean
-    lastActiveDate: String
-  }
-
   type User {
     id: ID
-    username: String!
-    token: String!
+    firstName: String!
+    lastName: String!
     email: String!
-    displayName: String!
+    gender: String!
+    birthday: Int!
+    avatarImage: String!
     coverImage: String!
-    status: statusValue!
+    token: String!
   }
+
   input RegisterInput {
-    username: String!
+    firstName: String!
+    lastName: String!
     email: String!
+    birthday: Int!
+    gender: String!
     password: String!
-    confirmPassword: String!
   }
 
   type AuthorValue {

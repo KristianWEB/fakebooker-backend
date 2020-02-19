@@ -7,7 +7,7 @@ const secret = props.JWT_SECRET;
 
 const User = require("../../models/User");
 const {
-  validateRegisterInput,
+  // validateRegisterInput,
   validateLoginInput,
 } = require("../../util/validators");
 
@@ -17,15 +17,12 @@ const generateToken = user => {
   return jwt.sign(
     {
       roles: user.roles,
-      _id: user._id,
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
-      username: user.username,
-      displayName: user.displayName,
       coverImage: user.coverImage,
-      status: {
-        isDeactivated: user.status.isDeactivated,
-        lastActiveDate: user.status.lastActiveDate,
-      },
+      avatarImage: user.avatarImage,
     },
     secret,
     {
@@ -77,29 +74,33 @@ module.exports = {
     },
     register: async (
       _,
-      { registerInput: { username, email, password, confirmPassword } }
-    ) => {
-      const { valid, errors } = validateRegisterInput(
-        username,
-        email,
-        password,
-        confirmPassword
-      );
-
-      if (!valid) {
-        throw new UserInputError("Errors", { errors });
+      {
+        registerInput: {
+          firstName,
+          lastName,
+          email,
+          birthday,
+          gender,
+          password,
+        },
       }
+    ) => {
+      // const { valid, errors } = validateRegisterInput(
+      //   firstName,
+      //   lastName,
+      //   email,
+      //   birthday,
+      //   gender,
+      //   password
+      // );
+
+      // if (!valid) {
+      //   throw new UserInputError("Errors", { errors });
+      // }
 
       // check if username or email is already taken
-      let user = await User.findByUsername(username);
-      if (user) {
-        throw new UserInputError("Username is taken", {
-          errors: {
-            username: "This username is taken",
-          },
-        });
-      }
-      user = await User.findByEmail(email);
+
+      const user = await User.findByEmail(email);
       if (user) {
         throw new UserInputError("Email is taken", {
           errors: {
@@ -109,15 +110,20 @@ module.exports = {
       }
 
       const newUser = new User({
+        firstName,
+        lastName,
         email,
+        birthday,
+        gender,
         password,
-        username,
       });
+
       const savedUser = await newUser.add();
 
       const token = generateToken(newUser);
       return {
         ...savedUser._doc,
+        id: savedUser._id,
         token,
       };
     },
