@@ -2,6 +2,7 @@ const testResolvers = require("./hello");
 const usersResolvers = require("./users");
 const postsResolvers = require("./posts");
 const commentsResolvers = require("./comments");
+const dateResolvers = require("./date");
 
 module.exports = {
   Post: {
@@ -21,5 +22,8 @@ module.exports = {
   Subscription: {
     ...commentsResolvers.Subscription,
     ...postsResolvers.Subscription,
+  },
+  Date: {
+    ...dateResolvers.Date,
   },
 };

@@ -14,14 +14,11 @@ const pubsub = new PubSub();
 
 module.exports = {
   Query: {
-    getPosts: async (_, { username }) => {
+    getPosts: async (_, __, context) => {
       try {
-        const user = await User.findByUsername(username);
-        if (!user) {
-          throw new Error("There is no user by that username");
-        }
+        const { user } = getAuthenticatedUser(context);
 
-        const posts = await Post.find({ userId: user._id }).sort({
+        const posts = await Post.find({ userId: user.id }).sort({
           creationDate: -1,
         });
         return posts;

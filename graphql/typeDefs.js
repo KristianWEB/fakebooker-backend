@@ -1,31 +1,34 @@
 const { gql } = require("apollo-server");
 
 module.exports = gql`
-  type statusValue {
-    isDeactivated: Boolean
-    lastActiveDate: String
-  }
+  scalar Date
 
   type User {
     id: ID
-    username: String!
-    token: String!
+    firstName: String!
+    lastName: String!
     email: String!
-    displayName: String!
+    gender: String!
+    birthday: Date!
+    avatarImage: String!
     coverImage: String!
-    status: statusValue!
+    token: String!
   }
+
   input RegisterInput {
-    username: String!
+    firstName: String!
+    lastName: String!
     email: String!
+    birthday: Date!
+    gender: String!
     password: String!
-    confirmPassword: String!
   }
 
   type AuthorValue {
     username: String!
     coverImage: String!
   }
+
   type Post {
     id: ID!
     userId: String!
@@ -56,7 +59,7 @@ module.exports = gql`
   type Query {
     hello: String!
     loadUser: User
-    getPosts(username: String!): [Post]
+    getPosts: [Post]
   }
   type Mutation {
     register(registerInput: RegisterInput): User!
