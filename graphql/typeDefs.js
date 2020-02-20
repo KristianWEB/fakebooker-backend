@@ -52,9 +52,8 @@ module.exports = gql`
 
   type Like {
     id: ID!
-    creationDate: String!
-    username: String!
-    coverImage: String!
+    userId: ID!
+    createdAt: String!
   }
 
   type Query {
