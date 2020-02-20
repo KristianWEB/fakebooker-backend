@@ -64,17 +64,15 @@ module.exports = {
       const { user } = getAuthenticatedUser(context);
       const post = await Post.findById(postId);
       if (post) {
-        if (post.likes.find(like => like.username === user.username)) {
+        if (post.likes.find(like => like.userId.toString() === user.id)) {
           // post was already liked
           post.likes = post.likes.filter(
-            like => like.username !== user.username
+            like => like.userId.toString() !== user.id
           );
         } else {
           // not liked post
           post.likes.push({
-            username: user.username,
-            creationDate: new Date().toISOString(),
-            coverImage: user.coverImage,
+            userId: user.id,
           });
         }
 
