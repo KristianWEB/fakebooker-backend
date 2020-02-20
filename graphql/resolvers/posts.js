@@ -50,7 +50,8 @@ module.exports = {
 
       try {
         const post = await Post.findById(postId);
-        if (user.username === post.author.username) {
+
+        if (user.id === post.author.userId.toString()) {
           await post.delete();
           return "Post deleted successfully";
         }
