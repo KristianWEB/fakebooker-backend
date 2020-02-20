@@ -25,16 +25,17 @@ module.exports = gql`
   }
 
   type AuthorValue {
-    username: String!
+    userId: ID!
+    firstName: String!
+    lastName: String!
     coverImage: String!
   }
 
   type Post {
     id: ID!
-    userId: String!
     author: AuthorValue!
-    content: String!
-    creationDate: String!
+    body: String!
+    createdAt: String!
     comments: [Comment]!
     likes: [Like]!
     likeCount: Int!
@@ -61,10 +62,11 @@ module.exports = gql`
     loadUser: User
     getPosts: [Post]
   }
+
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
-    createPost(content: String!): Post!
+    createPost(body: String!): Post!
     deletePost(postId: ID!): String!
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!

@@ -5,7 +5,6 @@ const {
 } = require("apollo-server");
 
 const Post = require("../../models/Post");
-const User = require("../../models/User");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
 const NEW_LIKE = "NEW_LIKE";
@@ -18,7 +17,7 @@ module.exports = {
       try {
         const { user } = getAuthenticatedUser(context);
 
-        const posts = await Post.find({ userId: user.id }).sort({
+        const posts = await Post.find({ "author.userId": user.id }).sort({
           creationDate: -1,
         });
         return posts;
@@ -28,17 +27,18 @@ module.exports = {
     },
   },
   Mutation: {
-    createPost: async (_, { content }, context) => {
+    createPost: async (_, { body }, context) => {
       const { user } = getAuthenticatedUser(context);
       if (!user) {
         throw new Error("Unauthenticated!");
       }
 
       const newPost = new Post({
-        content,
-        userId: user._id,
+        body,
         author: {
-          username: user.username,
+          userId: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
           coverImage: user.coverImage,
         },
       });
