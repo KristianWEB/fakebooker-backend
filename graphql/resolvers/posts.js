@@ -17,9 +17,11 @@ module.exports = {
       try {
         const { user } = getAuthenticatedUser(context);
 
-        const posts = await Post.find({ "author.userId": user.id }).sort({
-          creationDate: -1,
-        });
+        const posts = await Post.find({ author: user.id })
+          .populate("author", "firstName lastName coverImage")
+          .sort({
+            creationDate: -1,
+          });
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -35,14 +37,13 @@ module.exports = {
 
       const newPost = new Post({
         body,
-        author: {
-          userId: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          coverImage: user.coverImage,
-        },
+        author: user.id,
       });
-      const post = await newPost.save();
+      const post = await newPost
+        .save()
+        .then(t =>
+          t.populate("author", "firstName lastName coverImage").execPopulate()
+        );
       return post;
     },
     deletePost: async (_, { postId }, context) => {

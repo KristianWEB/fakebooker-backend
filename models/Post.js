@@ -26,14 +26,9 @@ const LikeSchema = new Schema({
 
 const PostSchema = new Schema({
   author: {
-    userId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    coverImage: { type: String, required: true },
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
   },
   body: { type: String, required: true },
   createdAt: { type: Number, default: Date.now() },
