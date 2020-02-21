@@ -25,7 +25,7 @@ module.exports = gql`
   }
 
   type AuthorValue {
-    userId: ID!
+    # userId: ID!
     firstName: String!
     lastName: String!
     coverImage: String!
@@ -51,8 +51,8 @@ module.exports = gql`
   }
 
   type Like {
-    id: ID!
     userId: ID!
+    postId: ID!
     createdAt: String!
   }
 

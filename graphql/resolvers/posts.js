@@ -5,6 +5,7 @@ const {
 } = require("apollo-server");
 
 const Post = require("../../models/Post");
+const Like = require("../../models/Like");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
 const NEW_LIKE = "NEW_LIKE";
@@ -17,9 +18,11 @@ module.exports = {
       try {
         const { user } = getAuthenticatedUser(context);
 
-        const posts = await Post.find({ "author.userId": user.id }).sort({
-          creationDate: -1,
-        });
+        const posts = await Post.find({ author: user.id })
+          .populate("author", "firstName lastName coverImage")
+          .sort({
+            creationDate: -1,
+          });
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -35,14 +38,13 @@ module.exports = {
 
       const newPost = new Post({
         body,
-        author: {
-          userId: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          coverImage: user.coverImage,
-        },
+        author: user.id,
       });
-      const post = await newPost.save();
+      const post = await newPost
+        .save()
+        .then(t =>
+          t.populate("author", "firstName lastName coverImage").execPopulate()
+        );
       return post;
     },
     deletePost: async (_, { postId }, context) => {
@@ -50,8 +52,7 @@ module.exports = {
 
       try {
         const post = await Post.findById(postId);
-
-        if (user.id === post.author.userId.toString()) {
+        if (user.id === post.author.toString()) {
           await post.delete();
           return "Post deleted successfully";
         }
@@ -62,25 +63,43 @@ module.exports = {
     },
     likePost: async (_, { postId }, context) => {
       const { user } = getAuthenticatedUser(context);
-      const post = await Post.findById(postId);
+
+      const post = await Post.findById(postId).populate(
+        "likes",
+        "userId postId createdAt"
+      );
       if (post) {
-        if (post.likes.find(like => like.userId.toString() === user.id)) {
-          // post was already liked
+        if (
+          post.likes.find(postLike => postLike.userId.toString() === user.id)
+        ) {
           post.likes = post.likes.filter(
-            like => like.userId.toString() !== user.id
+            postLike => postLike.userId.toString() !== user.id
           );
+          await Like.find({ userId: user.id }).deleteOne();
+
+          await post.save();
         } else {
           // not liked post
-          post.likes.push({
+          const newLike = new Like({
+            postId: post.id,
             userId: user.id,
           });
+          const like = await newLike.save();
+
+          post.likes.push(like._id);
+
+          pubsub.publish(NEW_LIKE, {
+            newLike: post.likes[post.likes.length - 1],
+          });
         }
-
-        pubsub.publish(NEW_LIKE, {
-          newLike: post.likes[post.likes.length - 1],
-        });
-
-        await post.save();
+        await post
+          .save()
+          .then(t =>
+            t.populate("author", "firstName lastName coverImage").execPopulate()
+          )
+          .then(t =>
+            t.populate("likes", "userId postId createdAt").execPopulate()
+          );
         return post;
       }
       throw new UserInputError("Post Not Found");

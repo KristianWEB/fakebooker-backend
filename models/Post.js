@@ -15,25 +15,20 @@ const CommentSchema = new Schema({
   },
 });
 
-const LikeSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
-  createdAt: { type: Number, default: Date.now() },
-});
+// const LikeSchema = new Schema({
+//   userId: {
+//     type: Schema.Types.ObjectId,
+//     required: true,
+//     ref: "User",
+//   },
+//   createdAt: { type: Number, default: Date.now() },
+// });
 
 const PostSchema = new Schema({
   author: {
-    userId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    coverImage: { type: String, required: true },
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
   },
   body: { type: String, required: true },
   createdAt: { type: Number, default: Date.now() },
@@ -41,10 +36,7 @@ const PostSchema = new Schema({
     type: [CommentSchema],
     default: [],
   },
-  likes: {
-    type: [LikeSchema],
-    default: [],
-  },
+  likes: [{ type: Schema.Types.ObjectId, ref: "Like", default: [] }],
 });
 
 const Post = model("Post", PostSchema);
