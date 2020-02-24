@@ -11,6 +11,8 @@ module.exports = {
 
         const posts = await Post.find({ userId: user.id })
           .populate("userId", "firstName lastName coverImage")
+          .populate("likes", "userId postId createdAt")
+          .populate("comments", "userId postId createdAt body")
           .sort({
             creationDate: -1,
           });
