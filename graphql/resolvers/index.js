@@ -2,6 +2,7 @@ const testResolvers = require("./hello");
 const usersResolvers = require("./users");
 const postsResolvers = require("./posts");
 const commentsResolvers = require("./comments");
+const likesResolvers = require("./likes");
 const dateResolvers = require("./date");
 
 module.exports = {
@@ -13,15 +14,13 @@ module.exports = {
     ...testResolvers.Query,
     ...usersResolvers.Query,
     ...postsResolvers.Query,
+    ...likesResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
     ...postsResolvers.Mutation,
     ...commentsResolvers.Mutation,
-  },
-  Subscription: {
-    ...commentsResolvers.Subscription,
-    ...postsResolvers.Subscription,
+    ...likesResolvers.Mutation,
   },
   Date: {
     ...dateResolvers.Date,
