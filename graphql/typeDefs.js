@@ -24,8 +24,7 @@ module.exports = gql`
     password: String!
   }
 
-  type AuthorValue {
-    # userId: ID!
+  type UserValue {
     firstName: String!
     lastName: String!
     coverImage: String!
@@ -33,7 +32,7 @@ module.exports = gql`
 
   type Post {
     id: ID!
-    author: AuthorValue!
+    userId: UserValue!
     body: String!
     createdAt: String!
     comments: [Comment]!
@@ -44,10 +43,10 @@ module.exports = gql`
 
   type Comment {
     id: ID!
-    userId: String!
-    creationDate: String!
-    author: AuthorValue!
+    userId: ID!
+    postId: ID!
     body: String!
+    createdAt: String!
   }
 
   type Like {
