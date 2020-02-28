@@ -36,7 +36,9 @@ module.exports = {
         await post
           .save()
           .then(t =>
-            t.populate("userId", "firstName lastName coverImage").execPopulate()
+            t
+              .populate("userId", "firstName lastName avatarImage")
+              .execPopulate()
           )
           .then(t =>
             t.populate("likes", "userId postId createdAt").execPopulate()

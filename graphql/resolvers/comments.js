@@ -27,7 +27,9 @@ module.exports = {
         await post
           .save()
           .then(t =>
-            t.populate("userId", "firstName lastName coverImage").execPopulate()
+            t
+              .populate("userId", "firstName lastName avatarImage")
+              .execPopulate()
           )
           .then(t =>
             t.populate("likes", "userId postId createdAt").execPopulate()
@@ -36,7 +38,7 @@ module.exports = {
             t
               .populate(
                 "comments",
-                "firstName lastName coverImage postId createdAt body"
+                "firstName lastName avatarImage postId createdAt body"
               )
               .execPopulate()
           )
@@ -47,7 +49,7 @@ module.exports = {
                 populate: {
                   path: "userId",
                   model: "User",
-                  select: "firstName lastName coverImage",
+                  select: "firstName lastName avatarImage",
                 },
               })
               .execPopulate()
@@ -74,7 +76,7 @@ module.exports = {
             .save()
             .then(t =>
               t
-                .populate("userId", "firstName lastName coverImage")
+                .populate("userId", "firstName lastName avatarImage")
                 .execPopulate()
             )
             .then(t =>
@@ -91,7 +93,7 @@ module.exports = {
                   path: "comments",
                   populate: {
                     path: "userId",
-                    select: "firstName lastName coverImage",
+                    select: "firstName lastName avatarImage",
                     model: "User",
                   },
                 })
