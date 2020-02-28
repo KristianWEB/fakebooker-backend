@@ -13,6 +13,14 @@ module.exports = {
           .populate("userId", "firstName lastName coverImage")
           .populate("likes", "userId postId createdAt")
           .populate("comments", "userId postId createdAt body")
+          .populate({
+            path: "comments",
+            populate: {
+              path: "userId",
+              model: "User",
+              select: "firstName lastName coverImage",
+            },
+          })
           .sort({
             creationDate: -1,
           });
