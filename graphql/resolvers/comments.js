@@ -27,14 +27,31 @@ module.exports = {
         await post
           .save()
           .then(t =>
-            t.populate("userId", "firstName lastName coverImage").execPopulate()
+            t
+              .populate("userId", "firstName lastName avatarImage")
+              .execPopulate()
           )
           .then(t =>
             t.populate("likes", "userId postId createdAt").execPopulate()
           )
           .then(t =>
             t
-              .populate("comments", "userId postId createdAt body")
+              .populate(
+                "comments",
+                "firstName lastName avatarImage postId createdAt body"
+              )
+              .execPopulate()
+          )
+          .then(t =>
+            t
+              .populate({
+                path: "comments",
+                populate: {
+                  path: "userId",
+                  model: "User",
+                  select: "firstName lastName avatarImage",
+                },
+              })
               .execPopulate()
           );
 
@@ -59,7 +76,7 @@ module.exports = {
             .save()
             .then(t =>
               t
-                .populate("userId", "firstName lastName coverImage")
+                .populate("userId", "firstName lastName avatarImage")
                 .execPopulate()
             )
             .then(t =>
@@ -69,8 +86,19 @@ module.exports = {
               t
                 .populate("comments", "userId postId createdAt body")
                 .execPopulate()
+            )
+            .then(t =>
+              t
+                .populate({
+                  path: "comments",
+                  populate: {
+                    path: "userId",
+                    select: "firstName lastName avatarImage",
+                    model: "User",
+                  },
+                })
+                .execPopulate()
             );
-
           return post;
         }
         throw new Error("Action not allowed");

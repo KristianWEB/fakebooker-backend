@@ -10,9 +10,17 @@ module.exports = {
         const { user } = getAuthenticatedUser(context);
 
         const posts = await Post.find({ userId: user.id })
-          .populate("userId", "firstName lastName coverImage")
+          .populate("userId", "firstName lastName avatarImage")
           .populate("likes", "userId postId createdAt")
           .populate("comments", "userId postId createdAt body")
+          .populate({
+            path: "comments",
+            populate: {
+              path: "userId",
+              model: "User",
+              select: "firstName lastName avatarImage",
+            },
+          })
           .sort({
             creationDate: -1,
           });
@@ -36,7 +44,7 @@ module.exports = {
       const post = await newPost
         .save()
         .then(t =>
-          t.populate("userId", "firstName lastName coverImage").execPopulate()
+          t.populate("userId", "firstName lastName avatarImage").execPopulate()
         );
       return post;
     },

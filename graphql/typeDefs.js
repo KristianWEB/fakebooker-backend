@@ -10,8 +10,8 @@ module.exports = gql`
     email: String!
     gender: String!
     birthday: Date!
-    avatarImage: String!
-    coverImage: String!
+    avatarImage: String
+    coverImage: String
     token: String!
   }
 
@@ -27,7 +27,7 @@ module.exports = gql`
   type UserValue {
     firstName: String!
     lastName: String!
-    coverImage: String!
+    avatarImage: String!
   }
 
   type Post {
@@ -43,7 +43,7 @@ module.exports = gql`
 
   type Comment {
     id: ID!
-    userId: ID!
+    userId: UserValue!
     postId: ID!
     body: String!
     createdAt: String!
