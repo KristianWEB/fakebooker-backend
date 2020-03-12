@@ -29,7 +29,7 @@
   "scripts": {
     "lint": "eslint ./",
     "lint-fix": "eslint --fix ./",
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "node ./src/index",
+    "dev": "nodemon ./src/index"
   }
 }
