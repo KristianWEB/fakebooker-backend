@@ -2,7 +2,6 @@ module.exports = {
   env: {
     commonjs: true,
     es6: true,
-    jest: true,
     node: true,
   },
   extends: ["airbnb-base", "prettier"],
@@ -16,10 +15,8 @@ module.exports = {
   },
   rules: {
     "prettier/prettier": "error",
-    "no-console": "off",
     "no-underscore-dangle": "off",
-    "no-param-reassign": 0,
-    "no-use-before-define": "off",
     "func-names": "off",
+    "no-console": "off",
   },
 };
