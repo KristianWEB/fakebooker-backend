@@ -5,7 +5,6 @@ const props = require("./config/properties");
 const connectDB = require("./config/database");
 
 const port = props.PORT;
-
 // Connect Database
 connectDB();
 
