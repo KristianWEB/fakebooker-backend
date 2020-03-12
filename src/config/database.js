@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const props = require("./properties");
 
-const db = props.DB_URL;
+require("dotenv").config();
+
+const db = process.env.DB_URL || props.DB_URL;
 
 const connectDB = async () => {
   try {
