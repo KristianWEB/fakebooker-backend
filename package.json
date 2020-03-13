@@ -33,6 +33,6 @@
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch"
   }
 }
