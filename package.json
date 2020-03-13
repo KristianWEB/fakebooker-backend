@@ -32,6 +32,7 @@
     "lint-fix": "eslint --fix ./",
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
-    "test": "jest --watch"
+    "test": "jest",
+    "test:watch": "jest --watch",
   }
 }
