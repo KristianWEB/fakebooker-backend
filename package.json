@@ -29,10 +29,10 @@
   },
   "scripts": {
     "lint": "eslint ./",
-    "lint-fix": "eslint --fix ./",
+    "lint:fix": "eslint --fix ./",
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --runInBand",
+    "test:watch": "jest --runInBand --watch"
   }
 }
