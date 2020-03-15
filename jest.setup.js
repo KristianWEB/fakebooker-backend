@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
-beforeAll(async done => {
-  const clearDB = () => {
-    Object.keys(mongoose.connection.collections).forEach(async key => {
-      await mongoose.connection.collections[key].deleteMany({});
-    });
-    return done();
-  };
+const clearDB = async () => {
+  Object.keys(mongoose.connection.collections).forEach(async key => {
+    await mongoose.connection.collections[key].deleteMany({});
+  });
+};
+
+beforeAll(async () => {
+  clearDB();
 
   await mongoose.connect(
     "mongodb://localhost:27017/fakebooker",
@@ -21,11 +22,6 @@ beforeAll(async done => {
   );
 });
 
-afterEach(async done => {
-  mongoose.disconnect();
-  return done();
-});
-
-afterAll(async done => {
-  return done();
+afterEach(() => {
+  clearDB();
 });

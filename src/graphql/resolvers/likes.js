@@ -3,6 +3,7 @@ const { UserInputError } = require("apollo-server");
 const Post = require("../../models/Post");
 const Like = require("../../models/Like");
 const getAuthenticatedUser = require("../middlewares/authenticated");
+const notifications = require("./notifications");
 
 module.exports = {
   Mutation: {
@@ -32,6 +33,15 @@ module.exports = {
           const like = await newLike.save();
 
           post.likes.push(like._id);
+
+          if (user.id !== post.userId.toString()) {
+            notifications.Mutation.createNotification({
+              creatorId: user.id,
+              notifierId: post.userId,
+              actionId: post._id,
+              action: "has liked your post",
+            });
+          }
         }
         await post
           .save()

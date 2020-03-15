@@ -30,6 +30,18 @@ module.exports = gql`
     avatarImage: String!
   }
 
+  type NotificationAction {
+    body: String!
+  }
+
+  type Notification {
+    id: ID!
+    creator: UserValue!
+    notifier: UserValue!
+    action: String!
+    actionId: NotificationAction!
+  }
+
   type Post {
     id: ID!
     userId: UserValue!
@@ -59,9 +71,11 @@ module.exports = gql`
     hello: String!
     loadUser: User
     getPosts: [Post]
+    getNotifications: [Notification]
   }
 
   type Mutation {
+    createNotification: String!
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     createPost(body: String!): Post!

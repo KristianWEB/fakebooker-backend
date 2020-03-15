@@ -1,10 +1,5 @@
 const { UserInputError } = require("apollo-server");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const props = require("../../config/properties");
-
-const secret = props.JWT_SECRET;
-
 const User = require("../../models/User");
 const {
   // validateRegisterInput,
@@ -13,25 +8,7 @@ const {
 
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
-const generateToken = user => {
-  return jwt.sign(
-    {
-      roles: user.roles,
-      id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      birthday: user.birthday,
-      coverImage: user.coverImage,
-      avatarImage: user.avatarImage,
-      gender: user.gender,
-    },
-    secret,
-    {
-      expiresIn: 604800,
-    }
-  );
-};
+const generateToken = require("../../util/generateToken");
 
 module.exports = {
   Query: {
