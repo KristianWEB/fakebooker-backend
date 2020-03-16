@@ -113,6 +113,66 @@ describe("Notifications integration testing", () => {
   });
 
   // should create a notification if the creator and the notifier are different users that are liking the post =>
+  test("should create a notification if the creator and then otifier are different users ( liking )", async () => {
+    // ARRANGE
+    const userA = await new User({
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      gender: faker.random.arrayElement(["male", "female"]),
+    }).add();
+
+    const userB = await new User({
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      gender: faker.random.arrayElement(["male", "female"]),
+    }).add();
+
+    const token = generateToken(userA);
+
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      context: () => ({
+        req: {
+          headers: {
+            authorization: `JWT ${token}`,
+          },
+        },
+      }),
+    });
+
+    // ACT
+    // use the test server to create a query function
+    const { mutate, query } = createTestClient(server);
+
+    // create a post from authenticated user ( user A )
+    const post = await mutate({
+      mutation: CREATE_POST,
+      variables: {
+        body: faker.lorem.sentence(),
+      },
+    });
+
+    // like a post from other user ( user B ) ?? HOW
+    await mutate({
+      mutation: LIKE_POST,
+      variables: {
+        postId: post.data.createPost.id,
+      },
+    });
+
+    // fetch notifications for authenticated user
+    const notifications = await query({
+      query: GET_NOTIFICATIONS,
+    });
+
+    // ASSERT
+    expect(notifications).toMatchSnapshot();
+  });
 
   // should create a notification if the creator and the notifier are different users that are commenting on the post
 

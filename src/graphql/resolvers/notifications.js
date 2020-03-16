@@ -5,14 +5,16 @@ module.exports = {
   Query: {
     getNotifications: async (_, __, context) => {
       const { user } = getAuthenticatedUser(context);
+      console.log(user);
 
       try {
         const notifications = await Notification.find({
-          creator: user.id,
+          notifier: user.id,
         })
           .populate("creator", "firstName lastName avatarImage")
           .populate("notifier", "firstName lastName avatarImage")
           .populate("actionId", "body");
+        console.log(notifications);
 
         return notifications;
       } catch (err) {
