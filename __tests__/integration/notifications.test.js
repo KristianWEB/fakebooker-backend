@@ -112,8 +112,7 @@ describe("Notifications integration testing", () => {
     expect(notifications).toMatchSnapshot();
   });
 
-  // should create a notification if the creator and the notifier are different users that are liking the post =>
-  test("should create a notification if the creator and then otifier are different users ( liking )", async () => {
+  test("should create a notification if the creator and the notifier are different users ( liking )", async () => {
     // ARRANGE
     const userA = await new User({
       firstName: faker.name.firstName(),
