@@ -70,15 +70,12 @@ describe("Notifications integration testing", () => {
 
     const token = generateToken(authUser);
 
-    const server = new ApolloServer({
-      typeDefs,
-      resolvers,
-      context: () => ({}),
-    });
-
     // ACT
     // use the test server to create a query function
-    const { mutate, query } = testClient(server);
+    const { mutate, query } = testClient({
+      resolvers,
+      typeDefs,
+    });
 
     // create a post from authenticated user
     const post = await mutate({
