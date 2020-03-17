@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
 const faker = require("faker");
+const { testClient } = require("../util/testClient");
 const typeDefs = require("../../src/graphql/typeDefs");
 const resolvers = require("../../src/graphql/resolvers/index");
 const User = require("../../src/models/User");
@@ -58,7 +58,7 @@ const GET_NOTIFICATIONS = gql`
 `;
 
 describe("Notifications integration testing", () => {
-  test("should not create a notification if the creator and the notifier are the same user ( authenticated )", async () => {
+  test.only("should not create a notification if the creator and the notifier are the same user ( authenticated )", async () => {
     // ARRANGE
     const authUser = await new User({
       firstName: faker.name.firstName(),
@@ -73,18 +73,12 @@ describe("Notifications integration testing", () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
-      context: () => ({
-        req: {
-          headers: {
-            authorization: `JWT ${token}`,
-          },
-        },
-      }),
+      context: () => ({}),
     });
 
     // ACT
     // use the test server to create a query function
-    const { mutate, query } = createTestClient(server);
+    const { mutate, query } = testClient(server);
 
     // create a post from authenticated user
     const post = await mutate({
@@ -92,7 +86,9 @@ describe("Notifications integration testing", () => {
       variables: {
         body: faker.lorem.sentence(),
       },
+      ctxArg: { req: { headers: { authorization: `JWT ${token}` } } },
     });
+    console.log(post);
 
     // like a post from authenticated user
     await mutate({
