@@ -34,7 +34,7 @@
     "lint:fix": "eslint --fix ./",
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --forceExit --detectOpenHandles",
     "test:watch": "jest --runInBand --watch"
   }
 }
