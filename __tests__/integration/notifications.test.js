@@ -38,7 +38,6 @@ const LIKE_POST = gql`
 const GET_NOTIFICATIONS = gql`
   {
     getNotifications {
-      id
       creator {
         firstName
         lastName
@@ -58,7 +57,7 @@ const GET_NOTIFICATIONS = gql`
 `;
 
 describe("Notifications integration testing", () => {
-  test.only("should not create a notification if the creator and the notifier are the same user ( authenticated )", async () => {
+  test("should not create a notification if the creator and the notifier are the same user ( authenticated )", async () => {
     // ARRANGE
     const authUser = await new User({
       firstName: faker.name.firstName(),
@@ -72,10 +71,16 @@ describe("Notifications integration testing", () => {
 
     // ACT
     // use the test server to create a query function
-    const { mutate, query } = testClient({
-      resolvers,
-      typeDefs,
-    });
+    const { mutate, query } = testClient(
+      {
+        resolvers,
+        typeDefs,
+        context: async ({ req }) => ({ req }),
+      },
+      {
+        req: { headers: { authorization: `JWT ${token}` } },
+      }
+    );
 
     // create a post from authenticated user
     const post = await mutate({
@@ -85,7 +90,6 @@ describe("Notifications integration testing", () => {
       },
       ctxArg: { req: { headers: { authorization: `JWT ${token}` } } },
     });
-    console.log(post);
 
     // like a post from authenticated user
     await mutate({
@@ -108,53 +112,53 @@ describe("Notifications integration testing", () => {
   test("should create a notification if the creator and the notifier are different users ( liking )", async () => {
     // ARRANGE
     const userA = await new User({
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+      firstName: "Devon",
+      lastName: "Orn",
       email: faker.internet.email(),
       password: faker.internet.password(),
       gender: faker.random.arrayElement(["male", "female"]),
     }).add();
 
     const userB = await new User({
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+      firstName: "Brady",
+      lastName: "Yost",
       email: faker.internet.email(),
       password: faker.internet.password(),
       gender: faker.random.arrayElement(["male", "female"]),
     }).add();
 
-    const token = generateToken(userA);
-
-    const server = new ApolloServer({
-      typeDefs,
-      resolvers,
-      context: () => ({
-        req: {
-          headers: {
-            authorization: `JWT ${token}`,
-          },
-        },
-      }),
-    });
+    const tokenA = generateToken(userA);
 
     // ACT
     // use the test server to create a query function
-    const { mutate, query } = createTestClient(server);
+    const { mutate, query } = testClient(
+      {
+        resolvers,
+        typeDefs,
+        context: async ({ req }) => ({ req }),
+      },
+      {
+        req: { headers: { authorization: `JWT ${tokenA}` } },
+      }
+    );
 
     // create a post from authenticated user ( user A )
     const post = await mutate({
       mutation: CREATE_POST,
       variables: {
-        body: faker.lorem.sentence(),
+        body: "example post",
       },
     });
 
     // like a post from other user ( user B ) ?? HOW
+    const tokenB = generateToken(userB);
+
     await mutate({
       mutation: LIKE_POST,
       variables: {
         postId: post.data.createPost.id,
       },
+      ctxArg: { req: { headers: { authorization: `JWT ${tokenB}` } } },
     });
 
     // fetch notifications for authenticated user
