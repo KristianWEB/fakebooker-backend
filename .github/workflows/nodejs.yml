@@ -5,24 +5,26 @@ name: Fakebooker-Backend
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      name: ESLint
-    - uses: stefanoeb/eslint-action@1.0.2
-      with:
-        files: src/
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: testing
-      run: npm test
-      env:
-        CI: true
+      - uses: actions/checkout@v2
+      - name: MongoDB in GitHub Actions
+        uses: supercharge/mongodb-github-action@1.1.0
+        name: ESLint
+      - uses: stefanoeb/eslint-action@1.0.2
+        with:
+          files: src/
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: testing
+        run: npm test
+        env:
+          CI: true
