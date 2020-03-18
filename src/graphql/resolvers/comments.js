@@ -1,6 +1,8 @@
 const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
 const getAuthenticatedUser = require("../middlewares/authenticated");
+const notifications = require("./notifications");
+const Notification = require("../../models/Notification");
 
 module.exports = {
   Mutation: {
@@ -24,38 +26,18 @@ module.exports = {
 
         post.comments.push(comment._id);
 
-        await post
-          .save()
-          .then(t =>
-            t
-              .populate("userId", "firstName lastName avatarImage")
-              .execPopulate()
-          )
-          .then(t =>
-            t.populate("likes", "userId postId createdAt").execPopulate()
-          )
-          .then(t =>
-            t
-              .populate(
-                "comments",
-                "firstName lastName avatarImage postId createdAt body"
-              )
-              .execPopulate()
-          )
-          .then(t =>
-            t
-              .populate({
-                path: "comments",
-                populate: {
-                  path: "userId",
-                  model: "User",
-                  select: "firstName lastName avatarImage",
-                },
-              })
-              .execPopulate()
-          );
+        if (user.id !== post.userId.toString()) {
+          notifications.Mutation.createNotification({
+            creatorId: user.id,
+            notifierId: post.userId,
+            actionId: post._id,
+            action: "has commented on your post",
+          });
+        }
 
-        return post;
+        await post.save();
+
+        return comment;
       }
       throw new Error("Post not found");
     },
@@ -72,34 +54,14 @@ module.exports = {
 
           await Comment.find({ userId: user.id }).deleteOne();
 
-          await post
-            .save()
-            .then(t =>
-              t
-                .populate("userId", "firstName lastName avatarImage")
-                .execPopulate()
-            )
-            .then(t =>
-              t.populate("likes", "userId postId createdAt").execPopulate()
-            )
-            .then(t =>
-              t
-                .populate("comments", "userId postId createdAt body")
-                .execPopulate()
-            )
-            .then(t =>
-              t
-                .populate({
-                  path: "comments",
-                  populate: {
-                    path: "userId",
-                    select: "firstName lastName avatarImage",
-                    model: "User",
-                  },
-                })
-                .execPopulate()
-            );
-          return post;
+          await Notification.find({
+            creator: user.id,
+            actionId: post._id,
+          }).deleteOne();
+
+          await post.save();
+
+          return comment;
         }
         throw new Error("Action not allowed");
       } else {

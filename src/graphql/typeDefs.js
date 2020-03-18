@@ -67,6 +67,13 @@ module.exports = gql`
     createdAt: String!
   }
 
+  type simpleComment {
+    id: ID!
+    userId: ID!
+    postId: ID!
+    body: String!
+    createdAt: String!
+  }
   type Query {
     hello: String!
     loadUser: User
@@ -80,8 +87,9 @@ module.exports = gql`
     login(email: String!, password: String!): User!
     createPost(body: String!): Post!
     deletePost(postId: ID!): String!
-    createComment(postId: ID!, body: String!): Post!
-    deleteComment(postId: ID!, commentId: ID!): Post!
+    # this is going to be refactored later ( when we create / delete comments we return the comments without populating => create a type that does that or simply dont require userValue to be returned )
+    createComment(postId: ID!, body: String!): simpleComment!
+    deleteComment(postId: ID!, commentId: ID!): simpleComment!
     likePost(postId: ID!): Post!
   }
 
