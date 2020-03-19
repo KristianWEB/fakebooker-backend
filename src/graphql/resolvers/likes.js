@@ -41,15 +41,12 @@ module.exports = {
           post.likes.push(like._id);
 
           if (user.id !== post.userId.toString()) {
-            notifications.Mutation.createNotification(
-              {
-                creatorId: user.id,
-                notifierId: post.userId,
-                actionId: post._id,
-                action: "has liked your post",
-              },
-              context
-            );
+            notifications.Mutation.createNotification({
+              creatorId: user.id,
+              notifierId: post.userId,
+              actionId: post._id,
+              action: "has liked your post",
+            });
           }
         }
         await post
