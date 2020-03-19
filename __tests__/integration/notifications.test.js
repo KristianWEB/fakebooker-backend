@@ -10,13 +10,6 @@ const CREATE_POST = gql`
   mutation createPost($body: String!) {
     createPost(body: $body) {
       id
-      userId {
-        firstName
-        lastName
-        avatarImage
-      }
-      body
-      createdAt
     }
   }
 `;
@@ -25,12 +18,6 @@ const LIKE_POST = gql`
   mutation likePost($postId: ID!) {
     likePost(postId: $postId) {
       id
-      likes {
-        userId
-        postId
-        createdAt
-      }
-      likeCount
     }
   }
 `;
@@ -39,12 +26,6 @@ const CREATE_COMMENT = gql`
   mutation createComment($postId: ID!, $body: String!) {
     createComment(postId: $postId, body: $body) {
       id
-      userId
-      body
-      createdAt
-      postId
-      body
-      createdAt
     }
   }
 `;
@@ -53,12 +34,6 @@ const DELETE_COMMENT = gql`
   mutation deleteComment($postId: ID!, $commentId: ID!) {
     deleteComment(postId: $postId, commentId: $commentId) {
       id
-      userId
-      body
-      createdAt
-      postId
-      body
-      createdAt
     }
   }
 `;

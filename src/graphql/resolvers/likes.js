@@ -41,12 +41,15 @@ module.exports = {
           post.likes.push(like._id);
 
           if (user.id !== post.userId.toString()) {
-            notifications.Mutation.createNotification({
-              creatorId: user.id,
-              notifierId: post.userId,
-              actionId: post._id,
-              action: "has liked your post",
-            });
+            notifications.Mutation.createNotification(
+              {
+                creatorId: user.id,
+                notifierId: post.userId,
+                actionId: post._id,
+                action: "has liked your post",
+              },
+              context
+            );
           }
         }
         await post
@@ -59,6 +62,7 @@ module.exports = {
           .then(t =>
             t.populate("likes", "userId postId createdAt").execPopulate()
           );
+
         return post;
       }
       throw new UserInputError("Post Not Found");

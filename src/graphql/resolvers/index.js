@@ -28,4 +28,7 @@ module.exports = {
   Date: {
     ...dateResolvers.Date,
   },
+  Subscription: {
+    ...notificationsResolvers.Subscription,
+  },
 };

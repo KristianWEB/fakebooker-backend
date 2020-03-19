@@ -1,5 +1,7 @@
+const { PubSub } = require("apollo-server");
 const Notification = require("../../models/Notification");
 const getAuthenticatedUser = require("../middlewares/authenticated");
+const pubsub = new PubSub();
 
 module.exports = {
   Query: {
@@ -22,12 +24,31 @@ module.exports = {
   },
   Mutation: {
     createNotification: async ({ creatorId, notifierId, actionId, action }) => {
-      await new Notification({
+      const notification = await Notification({
         creator: creatorId,
         notifier: notifierId,
         actionId,
         action,
-      }).save();
+      })
+        .save()
+        .then(t => t.populate("actionId", "body").execPopulate())
+        .then(t =>
+          t.populate("creator", "firstName lastName avatarImage").execPopulate()
+        )
+        .then(t =>
+          t
+            .populate("notifier", "firstName lastName avatarImage")
+            .execPopulate()
+        );
+
+      pubsub.publish("NEW_NOTIFICATION", {
+        newNotification: notification,
+      });
+    },
+  },
+  Subscription: {
+    newNotification: {
+      subscribe: () => pubsub.asyncIterator("NEW_NOTIFICATION"),
     },
   },
 };

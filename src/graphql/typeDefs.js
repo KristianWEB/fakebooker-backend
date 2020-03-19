@@ -25,9 +25,10 @@ module.exports = gql`
   }
 
   type UserValue {
-    firstName: String!
-    lastName: String!
-    avatarImage: String!
+    id: ID
+    firstName: String
+    lastName: String
+    avatarImage: String
   }
 
   type NotificationAction {
@@ -87,14 +88,12 @@ module.exports = gql`
     login(email: String!, password: String!): User!
     createPost(body: String!): Post!
     deletePost(postId: ID!): String!
-    # this is going to be refactored later ( when we create / delete comments we return the comments without populating => create a type that does that or simply dont require userValue to be returned )
     createComment(postId: ID!, body: String!): simpleComment!
     deleteComment(postId: ID!, commentId: ID!): simpleComment!
-    likePost(postId: ID!): Post!
+    likePost(postId: ID!): Post
   }
 
   type Subscription {
-    newComment: Comment!
-    newLike: Like!
+    newNotification: Notification!
   }
 `;
