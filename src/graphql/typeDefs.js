@@ -43,6 +43,10 @@ module.exports = gql`
     actionId: NotificationAction!
   }
 
+  type deletedNotification {
+    id: ID!
+  }
+
   type Post {
     id: ID!
     userId: UserValue!
@@ -84,6 +88,7 @@ module.exports = gql`
 
   type Mutation {
     createNotification: String!
+    deleteNotification: String!
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     createPost(body: String!): Post!
@@ -95,5 +100,6 @@ module.exports = gql`
 
   type Subscription {
     newNotification: Notification!
+    deleteNotification: String!
   }
 `;

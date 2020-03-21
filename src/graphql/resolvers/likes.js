@@ -3,7 +3,6 @@ const { UserInputError } = require("apollo-server");
 const Post = require("../../models/Post");
 const Like = require("../../models/Like");
 const getAuthenticatedUser = require("../middlewares/authenticated");
-const Notification = require("../../models/Notification");
 const notifications = require("./notifications");
 
 module.exports = {
@@ -24,10 +23,17 @@ module.exports = {
           );
           await Like.find({ userId: user.id }).deleteOne();
 
-          await Notification.find({
-            creator: user.id,
-            actionId: post._id,
-          }).deleteOne();
+          // await Notification.find({
+          //   creator: user.id,
+          //   actionId: post._id,
+          // }).deleteOne();
+
+          if (user.id !== post.userId.toString()) {
+            notifications.Mutation.deleteNotification({
+              creator: user.id,
+              actionId: post._id,
+            });
+          }
 
           await post.save();
         } else {

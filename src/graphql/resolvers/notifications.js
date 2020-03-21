@@ -1,6 +1,7 @@
 const { PubSub } = require("apollo-server");
 const Notification = require("../../models/Notification");
 const getAuthenticatedUser = require("../middlewares/authenticated");
+
 const pubsub = new PubSub();
 
 module.exports = {
@@ -45,10 +46,21 @@ module.exports = {
         newNotification: notification,
       });
     },
+    deleteNotification: async ({ creator, actionId }) => {
+      const notification = await Notification.findOne({ creator, actionId });
+
+      const { _id } = notification;
+      pubsub.publish("DELETE_NOTIFICATION", { deleteNotification: _id });
+
+      notification.deleteOne();
+    },
   },
   Subscription: {
     newNotification: {
       subscribe: () => pubsub.asyncIterator("NEW_NOTIFICATION"),
+    },
+    deleteNotification: {
+      subscribe: () => pubsub.asyncIterator("DELETE_NOTIFICATION"),
     },
   },
 };
