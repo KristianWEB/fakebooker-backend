@@ -22,7 +22,13 @@ module.exports = {
           postId,
           userId: user.id,
         });
-        const comment = await newComment.save();
+        const comment = await newComment
+          .save()
+          .then(t =>
+            t
+              .populate("userId", "firstName lastName avatarImage")
+              .execPopulate()
+          );
 
         post.comments.push(comment._id);
 
@@ -47,9 +53,12 @@ module.exports = {
       const post = await Post.findOne({ _id: postId });
 
       if (post) {
-        const comment = await Comment.findById(commentId);
+        const comment = await Comment.findById(commentId).populate(
+          "userId",
+          "_id firstName lastName avatarImage"
+        );
 
-        if (comment.userId.toString() === user.id) {
+        if (comment.userId._id.toString() === user.id) {
           post.comments.splice(comment, 1);
 
           await Comment.find({ userId: user.id }).deleteOne();

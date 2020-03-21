@@ -7,10 +7,6 @@ const dateResolvers = require("./date");
 const notificationsResolvers = require("./notifications");
 
 module.exports = {
-  Post: {
-    likeCount: parent => parent.likes.length,
-    commentCount: parent => parent.comments.length,
-  },
   Query: {
     ...testResolvers.Query,
     ...usersResolvers.Query,
