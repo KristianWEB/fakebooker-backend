@@ -25,9 +25,26 @@ module.exports = gql`
   }
 
   type UserValue {
-    firstName: String!
-    lastName: String!
-    avatarImage: String!
+    id: ID
+    firstName: String
+    lastName: String
+    avatarImage: String
+  }
+
+  type NotificationAction {
+    body: String!
+  }
+
+  type Notification {
+    id: ID!
+    creator: UserValue!
+    notifier: UserValue!
+    action: String!
+    actionId: NotificationAction!
+  }
+
+  type deletedNotification {
+    id: ID!
   }
 
   type Post {
@@ -37,8 +54,6 @@ module.exports = gql`
     createdAt: String!
     comments: [Comment]!
     likes: [Like]!
-    likeCount: Int!
-    commentCount: Int!
   }
 
   type Comment {
@@ -55,24 +70,34 @@ module.exports = gql`
     createdAt: String!
   }
 
+  type simpleComment {
+    id: ID!
+    userId: ID!
+    postId: ID!
+    body: String!
+    createdAt: String!
+  }
   type Query {
     hello: String!
     loadUser: User
     getPosts: [Post]
+    getNotifications: [Notification]
   }
 
   type Mutation {
+    createNotification: String!
+    deleteNotification: String!
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     createPost(body: String!): Post!
     deletePost(postId: ID!): String!
-    createComment(postId: ID!, body: String!): Post!
-    deleteComment(postId: ID!, commentId: ID!): Post!
-    likePost(postId: ID!): Post!
+    createComment(postId: ID!, body: String!): Comment!
+    deleteComment(postId: ID!, commentId: ID!): Comment!
+    likePost(postId: ID!): Post
   }
 
   type Subscription {
-    newComment: Comment!
-    newLike: Like!
+    newNotification: Notification!
+    deleteNotification: String!
   }
 `;

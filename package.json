@@ -18,21 +18,23 @@
     "mongoose": "^5.9.4"
   },
   "devDependencies": {
+    "apollo-server-testing": "^2.11.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
+    "faker": "^4.1.0",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
   },
   "scripts": {
     "lint": "eslint ./",
-    "lint-fix": "eslint --fix ./",
+    "lint:fix": "eslint --fix ./",
     "start": "node ./src/index",
     "dev": "nodemon ./src/index",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --forceExit --detectOpenHandles",
+    "test:watch": "jest --runInBand --watch"
   }
 }
