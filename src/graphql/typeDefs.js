@@ -41,6 +41,7 @@ module.exports = gql`
     notifier: UserValue!
     action: String!
     actionId: NotificationAction!
+    createdAt: Date!
   }
 
   type deletedNotification {

@@ -13,6 +13,7 @@ const NotificationSchema = new Schema({
   },
   action: { type: String, required: true },
   actionId: { type: Schema.Types.ObjectId, required: true, ref: "Post" },
+  createdAt: { type: Number, default: Date.now() },
 });
 
 const Notification = model("Notification", NotificationSchema);

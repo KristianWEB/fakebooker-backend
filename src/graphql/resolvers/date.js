@@ -10,7 +10,7 @@ module.exports = {
       return dayjs(value);
     },
     serialize(value) {
-      return dayjs(value).format("MM-DD-YYYY"); // value sent to the client
+      return dayjs(value).format("MM/DD/YYYY"); // value sent to the client
     },
     parseLiteral(ast) {
       if (ast.kind === Kind.STRING) {
