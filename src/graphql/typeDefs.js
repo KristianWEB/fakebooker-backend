@@ -12,7 +12,8 @@ module.exports = gql`
     birthday: Date!
     avatarImage: String
     coverImage: String
-    token: String!
+    token: String
+    username: String!
   }
 
   input RegisterInput {
@@ -81,6 +82,8 @@ module.exports = gql`
   type Query {
     hello: String!
     loadUser: User
+    loadFromUrlUser(username: String!): User
+    getUrlPosts(username: String!): [Post]
     getPosts: [Post]
     getNotifications: [Notification]
   }

@@ -12,8 +12,9 @@ const generateToken = require("../../util/generateToken");
 
 module.exports = {
   Query: {
-    loadUser: (_, __, context) => {
+    loadUser: async (_, __, context) => {
       const { user, token } = getAuthenticatedUser(context);
+      console.log(user);
       if (!user) {
         throw new Error("Unauthenticated!");
       }
@@ -21,6 +22,10 @@ module.exports = {
         token,
         ...user,
       };
+    },
+    loadFromUrlUser: async (_, { username }) => {
+      const user = await User.findOne({ username });
+      return user;
     },
   },
   Mutation: {
