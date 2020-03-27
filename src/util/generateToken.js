@@ -13,6 +13,7 @@ module.exports = user => {
       coverImage: user.coverImage,
       avatarImage: user.avatarImage,
       gender: user.gender,
+      username: user.username,
     },
     props.JWT_SECRET,
     {

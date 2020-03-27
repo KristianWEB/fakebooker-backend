@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const shortid = require("shortid");
 
 const { Schema } = mongoose;
 
@@ -7,6 +8,7 @@ const bcrypt = require("bcryptjs");
 const UserSchema = new Schema({
   firstName: { required: true, type: String },
   lastName: { required: true, type: String },
+  username: { required: true, type: String },
   email: { required: true, type: String },
   avatarImage: {
     type: String,
@@ -30,6 +32,10 @@ UserSchema.methods.add = function() {
   return new Promise(resolve => {
     bcrypt.hash(this.password, 10, (err, hash) => {
       if (err) throw err;
+      const username = `${this.firstName}.${
+        this.lastName
+      }${shortid.generate()}`;
+      this.username = username.toLowerCase();
       this.password = hash;
 
       this.save((error, savedObj) => {
