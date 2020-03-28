@@ -14,7 +14,7 @@ module.exports = {
   Query: {
     loadUser: async (_, __, context) => {
       const { user, token } = getAuthenticatedUser(context);
-      console.log(user);
+
       if (!user) {
         throw new Error("Unauthenticated!");
       }
