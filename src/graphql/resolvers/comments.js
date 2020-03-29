@@ -2,7 +2,6 @@ const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 const notifications = require("./notifications");
-const Notification = require("../../models/Notification");
 
 module.exports = {
   Mutation: {
@@ -62,11 +61,6 @@ module.exports = {
           post.comments.splice(comment, 1);
 
           await Comment.find({ userId: user.id }).deleteOne();
-
-          // await Notification.find({
-          //   creator: user.id,
-          //   actionId: post._id,
-          // }).deleteOne();
 
           if (user.id !== post.userId.toString()) {
             notifications.Mutation.deleteNotification({
