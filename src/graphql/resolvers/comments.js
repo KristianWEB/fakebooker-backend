@@ -63,10 +63,17 @@ module.exports = {
 
           await Comment.find({ userId: user.id }).deleteOne();
 
-          await Notification.find({
-            creator: user.id,
-            actionId: post._id,
-          }).deleteOne();
+          // await Notification.find({
+          //   creator: user.id,
+          //   actionId: post._id,
+          // }).deleteOne();
+
+          if (user.id !== post.userId.toString()) {
+            notifications.Mutation.deleteNotification({
+              creator: user.id,
+              actionId: post._id,
+            });
+          }
 
           await post.save();
 
