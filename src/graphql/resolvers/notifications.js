@@ -50,9 +50,10 @@ module.exports = {
       const notification = await Notification.findOne({ creator, actionId });
 
       const { _id } = notification;
+
       pubsub.publish("DELETE_NOTIFICATION", { deleteNotification: _id });
 
-      notification.deleteOne();
+      await notification.deleteOne();
     },
   },
   Subscription: {

@@ -390,7 +390,7 @@ describe("Notifications integration testing", () => {
       },
     });
 
-    // like a post from other user ( user B ) ?? HOW
+    // comment a post from other user ( user B )
     const tokenB = generateToken(userB);
 
     const createComment = await mutate({
@@ -413,10 +413,10 @@ describe("Notifications integration testing", () => {
     });
 
     // user B is uncommenting the post => delete the created notification
-    expect(
-      await query({
-        query: GET_NOTIFICATIONS,
-      })
-    ).toMatchSnapshot();
+    const notifications = await query({
+      query: GET_NOTIFICATIONS,
+    });
+
+    expect(notifications).toMatchSnapshot();
   });
 });
