@@ -14,6 +14,8 @@ module.exports = gql`
     coverImage: String
     token: String
     username: String!
+    workPlace: String
+    school: String
   }
 
   input RegisterInput {
@@ -81,7 +83,8 @@ module.exports = gql`
   }
   type Query {
     hello: String!
-    loadUser: User
+    loadUser(loadFromDB: Boolean): User
+    loadUserFromDB: User
     loadFromUrlUser(username: String!): User
     getUrlPosts(username: String!): [Post]
     getPosts: [Post]
@@ -98,6 +101,10 @@ module.exports = gql`
     createComment(postId: ID!, body: String!): Comment!
     deleteComment(postId: ID!, commentId: ID!): Comment!
     likePost(postId: ID!): Post
+    addWorkplace(body: String!): User!
+    deleteWorkplace: User!
+    addSchool(body: String!): User!
+    deleteSchool: User!
   }
 
   type Subscription {

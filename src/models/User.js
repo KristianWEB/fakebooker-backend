@@ -21,7 +21,8 @@ const UserSchema = new Schema({
   gender: { required: true, type: String },
   birthday: { type: Number, default: Date.now() },
   password: { required: true, type: String },
-  roles: { type: Array, default: ["user"] },
+  workPlace: { type: String },
+  school: { type: String },
 });
 
 UserSchema.statics.findByEmail = function(email, projection, opts) {

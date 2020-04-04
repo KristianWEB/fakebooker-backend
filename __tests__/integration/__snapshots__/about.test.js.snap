@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`About integration testing Add workplace 1`] = `
+Object {
+  "data": Object {
+    "addWorkplace": Object {
+      "workPlace": "Facebook",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`About integration testing Delete workplace 1`] = `
+Object {
+  "data": Object {
+    "deleteWorkplace": Object {
+      "workPlace": null,
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
