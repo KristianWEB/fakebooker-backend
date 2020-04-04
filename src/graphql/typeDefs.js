@@ -8,7 +8,7 @@ module.exports = gql`
     firstName: String!
     lastName: String!
     email: String!
-    gender: String!
+    gender: String
     birthday: Date!
     avatarImage: String
     coverImage: String
@@ -105,6 +105,8 @@ module.exports = gql`
     deleteWorkplace: User!
     addSchool(body: String!): User!
     deleteSchool: User!
+    addGender(gender: String!): User!
+    deleteGender: User!
   }
 
   type Subscription {

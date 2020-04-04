@@ -76,5 +76,41 @@ module.exports = {
 
       return newUser;
     },
+    addGender: async (_, { gender }, context) => {
+      const { user } = getAuthenticatedUser(context);
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        {
+          _id: user.id,
+        },
+        {
+          gender,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return newUser;
+    },
+    deleteGender: async (_, __, context) => {
+      const { user } = getAuthenticatedUser(context);
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        { _id: user.id },
+        { $unset: { gender: 1 } },
+        { new: true }
+      );
+
+      return newUser;
+    },
   },
 };
