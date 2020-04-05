@@ -9,13 +9,14 @@ module.exports = gql`
     lastName: String!
     email: String!
     gender: String
-    birthday: Date!
+    birthday: Date
     avatarImage: String
     coverImage: String
     token: String
     username: String!
     workPlace: String
     school: String
+    homePlace: String
   }
 
   input RegisterInput {
@@ -107,6 +108,10 @@ module.exports = gql`
     deleteSchool: User!
     addGender(gender: String!): User!
     deleteGender: User!
+    addBirthday(birthday: Date!): User!
+    deleteBirthday: User!
+    addHomeplace(homePlace: String!): User!
+    deleteHomeplace: User!
   }
 
   type Subscription {

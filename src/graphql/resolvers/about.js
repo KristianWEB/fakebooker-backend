@@ -112,5 +112,77 @@ module.exports = {
 
       return newUser;
     },
+    addBirthday: async (_, { birthday }, context) => {
+      const { user } = getAuthenticatedUser(context);
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        {
+          _id: user.id,
+        },
+        {
+          birthday,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return newUser;
+    },
+    deleteBirthday: async (_, __, context) => {
+      const { user } = getAuthenticatedUser(context);
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        { _id: user.id },
+        { $unset: { birthday: 1 } },
+        { new: true }
+      );
+
+      return newUser;
+    },
+    addHomeplace: async (_, { homePlace }, context) => {
+      const { user } = getAuthenticatedUser(context);
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        {
+          _id: user.id,
+        },
+        {
+          homePlace,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return newUser;
+    },
+    deleteHomeplace: async (_, __, context) => {
+      const { user } = getAuthenticatedUser(context);
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        { _id: user.id },
+        { $unset: { homePlace: 1 } },
+        { new: true }
+      );
+
+      return newUser;
+    },
   },
 };
