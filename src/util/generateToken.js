@@ -14,6 +14,7 @@ module.exports = user => {
       avatarImage: user.avatarImage,
       gender: user.gender,
       username: user.username,
+      workPlace: user.workPlace,
     },
     props.JWT_SECRET,
     {

@@ -18,10 +18,22 @@ module.exports = {
       if (!user) {
         throw new Error("Unauthenticated!");
       }
+
       return {
         token,
         ...user,
       };
+    },
+    loadUserFromDB: async (_, __, context) => {
+      const { user: authUser } = getAuthenticatedUser(context);
+
+      if (!authUser) {
+        throw new Error("Unauthenticated!");
+      }
+
+      const user = await User.findById(authUser.id);
+
+      return user;
     },
     loadFromUrlUser: async (_, { username }) => {
       const user = await User.findOne({ username });
