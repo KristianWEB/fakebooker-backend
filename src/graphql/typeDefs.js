@@ -56,6 +56,7 @@ module.exports = gql`
     id: ID!
     userId: UserValue!
     body: String!
+    image: String
     createdAt: String!
     comments: [Comment]!
     likes: [Like]!
@@ -97,7 +98,7 @@ module.exports = gql`
     deleteNotification: String!
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
-    createPost(body: String!): Post!
+    createPost(body: String!, image: String): Post!
     deletePost(postId: ID!): String!
     createComment(postId: ID!, body: String!): Comment!
     deleteComment(postId: ID!, commentId: ID!): Comment!
