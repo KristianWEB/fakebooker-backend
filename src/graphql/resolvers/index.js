@@ -6,6 +6,7 @@ const likesResolvers = require("./likes");
 const dateResolvers = require("./date");
 const notificationsResolvers = require("./notifications");
 const aboutResolvers = require("./about");
+const imageResolvers = require("./images");
 
 module.exports = {
   Query: {
@@ -15,6 +16,7 @@ module.exports = {
     ...likesResolvers.Query,
     ...notificationsResolvers.Query,
     ...aboutResolvers.Query,
+    ...imageResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
@@ -23,6 +25,7 @@ module.exports = {
     ...likesResolvers.Mutation,
     ...notificationsResolvers.Mutation,
     ...aboutResolvers.Mutation,
+    ...imageResolvers.Mutation,
   },
   Date: {
     ...dateResolvers.Date,

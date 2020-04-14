@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Posts integration testing should insert an image url in Post model if its provided in the mutation 1`] = `
+Object {
+  "data": Object {
+    "createPost": Object {
+      "body": "Example post",
+      "image": "https://images.unsplash.com/photo-1551641145-a1e18544acb9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=697&q=80",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

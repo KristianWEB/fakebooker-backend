@@ -56,7 +56,7 @@ module.exports = {
     },
   },
   Mutation: {
-    createPost: async (_, { body }, context) => {
+    createPost: async (_, { body, image }, context) => {
       const { user } = getAuthenticatedUser(context);
       if (!user) {
         throw new Error("Unauthenticated!");
@@ -64,6 +64,7 @@ module.exports = {
 
       const newPost = new Post({
         body,
+        image,
         userId: user.id,
       });
       const post = await newPost
