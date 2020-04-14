@@ -6,7 +6,7 @@ const PostSchema = new Schema({
     required: true,
     ref: "User",
   },
-  body: { type: String, required: true },
+  body: { type: String },
   image: { type: String },
   createdAt: { type: Number, default: Date.now() },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment", default: [] }],
