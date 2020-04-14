@@ -113,6 +113,7 @@ module.exports = gql`
     deleteBirthday: User!
     addHomeplace(homePlace: String!): User!
     deleteHomeplace: User!
+    deleteImage(publicId: String!): String!
   }
 
   type Subscription {
