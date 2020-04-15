@@ -24,6 +24,7 @@ const UserSchema = new Schema({
   workPlace: { type: String },
   homePlace: { type: String },
   school: { type: String },
+  friends: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
 });
 
 UserSchema.statics.findByEmail = function(email, projection, opts) {

@@ -12,8 +12,13 @@ const NotificationSchema = new Schema({
     ref: "User",
   },
   action: { type: String, required: true },
-  actionId: { type: Schema.Types.ObjectId, required: true, ref: "Post" },
+  actionId: { type: Schema.Types.ObjectId, ref: "Post" },
   createdAt: { type: Number, default: Date.now() },
+  status: {
+    type: String,
+    enum: ["pending", "accepted"],
+    default: "pending",
+  },
 });
 
 const Notification = model("Notification", NotificationSchema);

@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Friends integration testing User A sends a friend request to User B => if User B accepts add User A to User B's friends array 1`] = `
+Object {
+  "data": Object {
+    "acceptFriend": Object {
+      "action": "Sent you a friend request",
+      "creator": Object {
+        "avatarImage": "https://scontent.fsof4-1.fna.fbcdn.net/v/t1.30497-1/c71.0.240.240a/p240x240/84241059_189132118950875_4138507100605120512_n.jpg?_nc_cat=1&_nc_sid=7206a8&_nc_ohc=CD3ImewvDlgAX8f-QvY&_nc_ht=scontent.fsof4-1.fna&oh=782172992e9272da49f35f7f40ef8d63&oe=5EED0201",
+        "firstName": "Vincent",
+        "lastName": "Beahan",
+      },
+      "notifier": Object {
+        "avatarImage": "https://scontent.fsof4-1.fna.fbcdn.net/v/t1.30497-1/c71.0.240.240a/p240x240/84241059_189132118950875_4138507100605120512_n.jpg?_nc_cat=1&_nc_sid=7206a8&_nc_ohc=CD3ImewvDlgAX8f-QvY&_nc_ht=scontent.fsof4-1.fna&oh=782172992e9272da49f35f7f40ef8d63&oe=5EED0201",
+        "firstName": "Emil",
+        "lastName": "Reinger",
+      },
+      "status": "accepted",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Friends integration testing should create a notification with status: pending if User A sends a friend request to User B 1`] = `
+Object {
+  "data": Object {
+    "addFriend": Object {
+      "action": "Sent you a friend request",
+      "creator": Object {
+        "avatarImage": "https://scontent.fsof4-1.fna.fbcdn.net/v/t1.30497-1/c71.0.240.240a/p240x240/84241059_189132118950875_4138507100605120512_n.jpg?_nc_cat=1&_nc_sid=7206a8&_nc_ohc=CD3ImewvDlgAX8f-QvY&_nc_ht=scontent.fsof4-1.fna&oh=782172992e9272da49f35f7f40ef8d63&oe=5EED0201",
+        "firstName": "Vincent",
+        "lastName": "Beahan",
+      },
+      "notifier": Object {
+        "avatarImage": "https://scontent.fsof4-1.fna.fbcdn.net/v/t1.30497-1/c71.0.240.240a/p240x240/84241059_189132118950875_4138507100605120512_n.jpg?_nc_cat=1&_nc_sid=7206a8&_nc_ohc=CD3ImewvDlgAX8f-QvY&_nc_ht=scontent.fsof4-1.fna&oh=782172992e9272da49f35f7f40ef8d63&oe=5EED0201",
+        "firstName": "Emil",
+        "lastName": "Reinger",
+      },
+      "status": "pending",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

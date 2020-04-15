@@ -44,8 +44,9 @@ module.exports = gql`
     creator: UserValue!
     notifier: UserValue!
     action: String!
-    actionId: NotificationAction!
+    actionId: NotificationAction
     createdAt: Date!
+    status: String
   }
 
   type deletedNotification {
@@ -94,7 +95,7 @@ module.exports = gql`
   }
 
   type Mutation {
-    createNotification: String!
+    createNotification: Notification!
     deleteNotification: String!
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
@@ -114,6 +115,10 @@ module.exports = gql`
     addHomeplace(homePlace: String!): User!
     deleteHomeplace: User!
     deleteImage(publicId: String!): String!
+    addFriend(notifier: String!): Notification!
+    acceptFriend(creator: String!): Notification!
+    rejectFriend(creator: String!): String!
+    removeFriend(creator: String!): String!
   }
 
   type Subscription {

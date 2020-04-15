@@ -8,7 +8,7 @@ const notifications = require("./notifications");
 module.exports = {
   Mutation: {
     likePost: async (_, { postId }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       const post = await Post.findById(postId).populate(
         "likes",
@@ -22,11 +22,6 @@ module.exports = {
             postLike => postLike.userId.toString() !== user.id
           );
           await Like.find({ userId: user.id }).deleteOne();
-
-          // await Notification.find({
-          //   creator: user.id,
-          //   actionId: post._id,
-          // }).deleteOne();
 
           if (user.id !== post.userId.toString()) {
             notifications.Mutation.deleteNotification({

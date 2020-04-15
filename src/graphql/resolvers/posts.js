@@ -8,7 +8,7 @@ module.exports = {
   Query: {
     getPosts: async (_, __, context) => {
       try {
-        const { user } = getAuthenticatedUser(context);
+        const { user } = await getAuthenticatedUser({ context });
 
         const posts = await Post.find({ userId: user.id })
           .populate("userId", "firstName lastName avatarImage")
@@ -57,7 +57,7 @@ module.exports = {
   },
   Mutation: {
     createPost: async (_, { body, image }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
       if (!user) {
         throw new Error("Unauthenticated!");
       }
@@ -75,7 +75,7 @@ module.exports = {
       return post;
     },
     deletePost: async (_, { postId }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       try {
         const post = await Post.findById(postId);
