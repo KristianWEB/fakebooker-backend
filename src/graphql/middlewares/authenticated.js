@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 const props = require("../../config/properties");
+const generateToken = require("../../util/generateToken");
+const User = require("../../models/User");
 
 const secret = props.JWT_SECRET;
 
-module.exports = context => {
+module.exports = async ({ context, newToken }) => {
   const authHeader = context.req.headers.authorization;
   let user = null;
   let token = null;
@@ -13,6 +15,12 @@ module.exports = context => {
     if (token) {
       user = jwt.verify(token, secret);
     }
+  }
+  if (newToken) {
+    const newUser = await User.findById(user.id);
+
+    token = generateToken(newUser);
+    user = newUser;
   }
 
   return {

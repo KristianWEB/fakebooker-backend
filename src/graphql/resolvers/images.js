@@ -12,7 +12,7 @@ cloudinary.config({
 module.exports = {
   Mutation: {
     deleteImage: async (_, { publicId }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");

@@ -13,7 +13,7 @@ const generateToken = require("../../util/generateToken");
 module.exports = {
   Query: {
     loadUser: async (_, __, context) => {
-      const { user, token } = getAuthenticatedUser(context);
+      const { user, token } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new Error("Unauthenticated!");
@@ -25,7 +25,7 @@ module.exports = {
       };
     },
     loadUserFromDB: async (_, __, context) => {
-      const { user: authUser } = getAuthenticatedUser(context);
+      const { user: authUser } = await getAuthenticatedUser({ context });
 
       if (!authUser) {
         throw new Error("Unauthenticated!");

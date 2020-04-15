@@ -5,7 +5,7 @@ const getAuthenticatedUser = require("../middlewares/authenticated");
 module.exports = {
   Mutation: {
     addWorkplace: async (_, { body }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -26,7 +26,7 @@ module.exports = {
       return newUser;
     },
     deleteWorkplace: async (_, __, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -41,7 +41,7 @@ module.exports = {
       return newUser;
     },
     addSchool: async (_, { body }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -62,7 +62,7 @@ module.exports = {
       return newUser;
     },
     deleteSchool: async (_, __, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -77,7 +77,7 @@ module.exports = {
       return newUser;
     },
     addGender: async (_, { gender }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -98,7 +98,7 @@ module.exports = {
       return newUser;
     },
     deleteGender: async (_, __, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -113,7 +113,7 @@ module.exports = {
       return newUser;
     },
     addBirthday: async (_, { birthday }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -134,7 +134,7 @@ module.exports = {
       return newUser;
     },
     deleteBirthday: async (_, __, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -149,7 +149,7 @@ module.exports = {
       return newUser;
     },
     addHomeplace: async (_, { homePlace }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");
@@ -170,7 +170,7 @@ module.exports = {
       return newUser;
     },
     deleteHomeplace: async (_, __, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       if (!user) {
         throw new AuthenticationError("Unauthenticated!");

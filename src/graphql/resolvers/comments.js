@@ -6,7 +6,7 @@ const notifications = require("./notifications");
 module.exports = {
   Mutation: {
     createComment: async (_, { postId, body }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
       if (!user) {
         throw new Error("Unauthenticated!");
       }
@@ -47,7 +47,7 @@ module.exports = {
       throw new Error("Post not found");
     },
     deleteComment: async (_, { postId, commentId }, context) => {
-      const { user } = getAuthenticatedUser(context);
+      const { user } = await getAuthenticatedUser({ context });
 
       const post = await Post.findOne({ _id: postId });
 
