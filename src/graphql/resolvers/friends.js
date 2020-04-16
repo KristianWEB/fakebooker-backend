@@ -90,8 +90,6 @@ module.exports = {
       }
 
       const creatorUser = await User.findOne({ username: creator });
-      console.log(notifierUser);
-      console.log(creatorUser);
 
       // remove the notification
       const notification = await Notification.findOneAndDelete({
