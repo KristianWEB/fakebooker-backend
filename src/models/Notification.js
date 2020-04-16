@@ -16,8 +16,6 @@ const NotificationSchema = new Schema({
   createdAt: { type: Number, default: Date.now() },
   status: {
     type: String,
-    enum: ["pending", "accepted"],
-    default: "pending",
   },
 });
 

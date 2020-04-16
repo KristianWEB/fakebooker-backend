@@ -24,12 +24,19 @@ module.exports = {
     },
   },
   Mutation: {
-    createNotification: async ({ creatorId, notifierId, actionId, action }) => {
+    createNotification: async ({
+      creatorId,
+      notifierId,
+      actionId,
+      action,
+      status,
+    }) => {
       const notification = await Notification({
         creator: creatorId,
         notifier: notifierId,
         actionId,
         action,
+        status,
       })
         .save()
         .then(t => t.populate("actionId", "body").execPopulate())

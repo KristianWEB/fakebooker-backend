@@ -19,6 +19,7 @@ module.exports = {
         creatorId: creator.id,
         notifierId: notifierUser.id,
         action: "Sent you a friend request",
+        status: "pending",
       });
 
       return notification;
