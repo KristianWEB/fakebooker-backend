@@ -92,6 +92,7 @@ module.exports = gql`
     getUrlPosts(username: String!): [Post]
     getPosts: [Post]
     getNotifications: [Notification]
+    getSingleNotification(creator: String!, notifier: String!): Notification
   }
 
   type Mutation {

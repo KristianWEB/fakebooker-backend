@@ -22,6 +22,23 @@ module.exports = {
 
       return notifications;
     },
+    getSingleNotification: async (_, { creator, notifier }, context) => {
+      const { user } = await getAuthenticatedUser({ context });
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const notification = await Notification.findOne({
+        notifier,
+        creator,
+        action: "Sent you a friend request",
+      })
+        .populate("creator", "firstName lastName avatarImage")
+        .populate("notifier", "firstName lastName avatarImage");
+
+      return notification;
+    },
   },
   Mutation: {
     createNotification: async ({
