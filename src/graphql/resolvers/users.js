@@ -31,12 +31,18 @@ module.exports = {
         throw new Error("Unauthenticated!");
       }
 
-      const user = await User.findById(authUser.id);
+      const user = await User.findById(authUser.id).populate(
+        "friends",
+        "firstName lastName avatarImage username"
+      );
 
       return user;
     },
     loadFromUrlUser: async (_, { username }) => {
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ username }).populate(
+        "friends",
+        "id firstName lastName avatarImage username"
+      );
       return user;
     },
   },

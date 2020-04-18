@@ -53,7 +53,16 @@ const REJECT_FRIEND = gql`
 
 const REMOVE_FRIEND = gql`
   mutation removeFriend($creator: String!) {
-    removeFriend(creator: $creator)
+    removeFriend(creator: $creator) {
+      id
+      friends {
+        id
+        firstName
+        lastName
+        avatarImage
+        username
+      }
+    }
   }
 `;
 
@@ -231,16 +240,13 @@ describe("Friends integration testing", () => {
     const tokenB = generateToken(userB);
 
     // reject the friend request from userB
-    const rejectNotificationId = await mutate({
+    await mutate({
       mutation: REJECT_FRIEND,
       variables: {
         creator: userA.username,
       },
       ctxArg: { req: { headers: { authorization: `JWT ${tokenB}` } } },
     });
-    expect(
-      await Notification.findById(rejectNotificationId.data.rejectFriend)
-    ).toBeNull();
 
     // assert that user B and user A do NOT have their ids in each one's friends array
     const newUserA = await User.findById(userA.id);
@@ -305,7 +311,7 @@ describe("Friends integration testing", () => {
     });
 
     // remove the friend ( User A ) from userB
-    const removeNotificationId = await mutate({
+    await mutate({
       mutation: REMOVE_FRIEND,
       variables: {
         creator: userA.username,
@@ -313,9 +319,6 @@ describe("Friends integration testing", () => {
       ctxArg: { req: { headers: { authorization: `JWT ${tokenB}` } } },
     });
 
-    expect(
-      await Notification.findById(removeNotificationId.data.removeFriend)
-    ).toBeNull();
     // assert that user B and user A do NOT have their ids in each one's friends array
     const newUserA = await User.findById(userA.id);
     const newUserB = await User.findById(userB.id);

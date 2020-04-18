@@ -17,6 +17,7 @@ module.exports = gql`
     workPlace: String
     school: String
     homePlace: String
+    friends: [UserValue]
   }
 
   input RegisterInput {
@@ -33,6 +34,7 @@ module.exports = gql`
     firstName: String
     lastName: String
     avatarImage: String
+    username: String
   }
 
   type NotificationAction {
@@ -86,7 +88,7 @@ module.exports = gql`
   }
   type Query {
     hello: String!
-    loadUser(loadFromDB: Boolean): User
+    loadUser: User
     loadUserFromDB: User
     loadFromUrlUser(username: String!): User
     getUrlPosts(username: String!): [Post]
@@ -119,7 +121,7 @@ module.exports = gql`
     addFriend(notifier: String!): Notification!
     acceptFriend(creator: String!): Notification!
     rejectFriend(creator: String!): String!
-    removeFriend(creator: String!): String!
+    removeFriend(creator: String!): User!
   }
 
   type Subscription {

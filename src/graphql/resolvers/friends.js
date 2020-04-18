@@ -102,47 +102,56 @@ module.exports = {
       return notification.id;
     },
     removeFriend: async (_, { creator }, context) => {
-      const { user: notifierUser } = await getAuthenticatedUser({
+      const { user: userA } = await getAuthenticatedUser({
         context,
         newToken: true,
       });
 
-      if (!notifierUser) {
+      if (!userA) {
         throw new AuthenticationError("Unauthenticated!");
       }
 
-      const creatorUser = await User.findOne({ username: creator });
+      const userB = await User.findOne({ username: creator });
 
-      // remove the notification
-      const notification = await Notification.findOneAndDelete({
-        creator: creatorUser.id,
-        notifier: notifierUser.id,
+      // remove the notification ( for both sides, creator and notifier should be passed as params cuz we dont know who is the creator, neither the notifier)
+      await Notification.findOneAndDelete({
+        creator: userB.id,
+        notifier: userA.id,
         action: "Sent you a friend request",
       });
 
-      // remove userA's ID from userB's friends array
-      const newFriendsArrUserA = notifierUser.friends.filter(
-        friendId => friendId.toString() !== creatorUser.id.toString()
+      // try the other way around because we dont know who is the creator and the notifier
+      await Notification.findOneAndDelete({
+        creator: userA.id,
+        notifier: userB.id,
+        action: "Sent you a friend request",
+      });
+
+      // remove userB's ID from userA's friends array
+      const newFriendsArrUserA = userA.friends.filter(
+        friendId => friendId.toString() !== userB.id.toString()
       );
 
       await User.findOneAndUpdate(
-        { _id: creatorUser.id },
+        { _id: userA.id },
         { $unset: { friends: newFriendsArrUserA } },
         { new: true }
       );
 
-      // remove userB's ID from userA's friends array
-      const newFriendsArrUserB = creatorUser.friends.filter(
-        friendId => friendId.toString() !== notifierUser.id.toString()
+      // remove userA's ID from userB's friends array
+      const newFriendsArrUserB = userB.friends.filter(
+        friendId => friendId.toString() !== userA.id.toString()
       );
 
       await User.findOneAndUpdate(
-        { _id: notifierUser.id },
+        { _id: userB.id },
         { $unset: { friends: newFriendsArrUserB } },
         { new: true }
       );
 
-      return notification.id;
+      const newUser = await User.findById(userA);
+
+      return newUser;
     },
   },
 };
