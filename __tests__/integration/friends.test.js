@@ -4,7 +4,6 @@ const { testClient } = require("../util/testClient");
 const typeDefs = require("../../src/graphql/typeDefs");
 const resolvers = require("../../src/graphql/resolvers/index");
 const User = require("../../src/models/User");
-const Notification = require("../../src/models/Notification");
 const generateToken = require("../../src/util/generateToken");
 
 const ADD_FRIEND = gql`

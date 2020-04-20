@@ -51,6 +51,14 @@ module.exports = gql`
     status: String
   }
 
+  type Message {
+    id: ID!
+    creator: UserValue!
+    notifier: UserValue!
+    body: String!
+    createdAt: Date!
+  }
+
   type deletedNotification {
     id: ID!
   }
@@ -95,6 +103,7 @@ module.exports = gql`
     getPosts: [Post]
     getNotifications: [Notification]
     getSingleNotification(creator: String!, notifier: String!): Notification
+    getMessages: [Message]
   }
 
   type Mutation {
@@ -122,10 +131,12 @@ module.exports = gql`
     acceptFriend(creator: String!): Notification!
     rejectFriend(creator: String!): String!
     removeFriend(creator: String!): User!
+    createMessage(notifier: String!, body: String!): Message!
   }
 
   type Subscription {
     newNotification: Notification!
     deleteNotification: String!
+    newMessage(notifier: String!): Message
   }
 `;
