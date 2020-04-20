@@ -8,6 +8,7 @@ const notificationsResolvers = require("./notifications");
 const aboutResolvers = require("./about");
 const imageResolvers = require("./images");
 const friendsResolvers = require("./friends");
+const messagesResolvers = require("./messages");
 
 module.exports = {
   Query: {
@@ -19,6 +20,7 @@ module.exports = {
     ...aboutResolvers.Query,
     ...imageResolvers.Query,
     ...friendsResolvers.Query,
+    ...messagesResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
@@ -29,11 +31,13 @@ module.exports = {
     ...aboutResolvers.Mutation,
     ...imageResolvers.Mutation,
     ...friendsResolvers.Mutation,
+    ...messagesResolvers.Mutation,
   },
   Date: {
     ...dateResolvers.Date,
   },
   Subscription: {
     ...notificationsResolvers.Subscription,
+    ...messagesResolvers.Subscription,
   },
 };
