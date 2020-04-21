@@ -20,7 +20,6 @@ const CREATE_MESSAGE = gql`
         avatarImage
       }
       body
-      createdAt
     }
   }
 `;
