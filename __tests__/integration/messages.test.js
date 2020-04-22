@@ -38,7 +38,6 @@ const GET_MESSAGES = gql`
         avatarImage
       }
       body
-      createdAt
     }
   }
 `;
