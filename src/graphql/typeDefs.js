@@ -111,7 +111,8 @@ module.exports = gql`
     getNotifications: [Notification]
     getSingleNotification(creator: String!, notifier: String!): Notification
     getMessages: [Message]
-    getSingleChat(threadId: String!): [Message]
+    getSingleChat(threadId: String): [Message]
+    getThread(urlUser: String): Thread
   }
 
   type Mutation {
