@@ -7,8 +7,8 @@ const User = require("../../src/models/User");
 const generateToken = require("../../src/util/generateToken");
 
 const CREATE_MESSAGE = gql`
-  mutation createMessage($notifier: String!, $body: String!) {
-    createMessage(notifier: $notifier, body: $body) {
+  mutation createMessage($notifier: String!, $body: String!, $threadId: ID!) {
+    createMessage(notifier: $notifier, body: $body, threadId: $threadId) {
       creator {
         firstName
         lastName
@@ -20,6 +20,16 @@ const CREATE_MESSAGE = gql`
         avatarImage
       }
       body
+    }
+  }
+`;
+
+const CREATE_THREAD = gql`
+  mutation createThread($urlUser: String!) {
+    createThread(urlUser: $urlUser) {
+      id
+      participantsIds
+      createdAt
     }
   }
 `;
@@ -76,15 +86,23 @@ describe("Chat system integration testing", () => {
       }
     );
 
+    // create a thread that is going to be used for all messages between user A and user B ( conversation ) from authenticated user ( user A )
+    const thread = await mutate({
+      mutation: CREATE_THREAD,
+      variables: {
+        urlUser: userB.id,
+      },
+    });
+
     // create a message from authenticated user ( user A )
     const message = await mutate({
       mutation: CREATE_MESSAGE,
       variables: {
         notifier: userB.id,
         body: "how are you buddy?",
+        threadId: thread.data.createThread.id,
       },
     });
-
     // assert that createMessage mutation returns the proper data
     expect(message).toMatchObject({
       data: {
