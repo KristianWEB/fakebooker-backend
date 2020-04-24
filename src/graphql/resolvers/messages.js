@@ -62,9 +62,8 @@ module.exports = {
             .execPopulate()
         );
 
-      pubsub.publish("newMessage", {
+      pubsub.publish("NEW_MESSAGE", {
         newMessage: message,
-        notifier,
       });
 
       return message;
@@ -72,12 +71,7 @@ module.exports = {
   },
   Subscription: {
     newMessage: {
-      subscribe: withFilter(
-        () => pubsub.asyncIterator("newMessage"),
-        (payload, variables) => {
-          return payload.notifier === variables.notifier;
-        }
-      ),
+      subscribe: () => pubsub.asyncIterator("NEW_MESSAGE"),
     },
   },
 };
