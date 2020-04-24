@@ -1,5 +1,6 @@
-const { AuthenticationError, PubSub, withFilter } = require("apollo-server");
+const { AuthenticationError, PubSub } = require("apollo-server");
 const Message = require("../../models/Message");
+const Thread = require("../../models/Thread");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
 const pubsub = new PubSub();
@@ -12,6 +13,29 @@ module.exports = {
       if (!authUser) {
         throw new AuthenticationError("Unauthenticated!");
       }
+
+      // TODO: to make messages notification right => fetch all threads => fetch latestmessage of the thread ( creator/notifier authUser ) and save it into array
+      // THIS CURRENTLY DOESNT WORK
+      // const conversation = await Promise.all(
+      //   threads.map(async thread => {
+      //     // for each thread we find the latest message and s
+      //     const message = await Message.findOne({
+      //       $or: [
+      //         {
+      //           threadId: thread.id,
+      //           creator: authUser.id,
+      //         },
+      //         {
+      //           threadId: thread.id,
+      //           notifier: authUser.id,
+      //         },
+      //       ],
+      //     })
+      //       .sort("-createdAt")
+      //       .populate("creator", "firstName lastName avatarImage")
+      //       .populate("notifier", "firstName lastName avatarImage");
+      // })
+      // );
 
       const messages = await Message.find({
         notifier: authUser.id,
