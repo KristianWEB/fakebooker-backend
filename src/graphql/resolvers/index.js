@@ -10,6 +10,7 @@ const imageResolvers = require("./images");
 const friendsResolvers = require("./friends");
 const messagesResolvers = require("./messages");
 const threadsResolvers = require("./threads");
+const newsfeedResolvers = require("./newsfeed");
 
 module.exports = {
   Query: {
@@ -23,6 +24,7 @@ module.exports = {
     ...friendsResolvers.Query,
     ...messagesResolvers.Query,
     ...threadsResolvers.Query,
+    ...newsfeedResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
@@ -42,5 +44,6 @@ module.exports = {
   Subscription: {
     ...notificationsResolvers.Subscription,
     ...messagesResolvers.Subscription,
+    ...postsResolvers.Subscription,
   },
 };

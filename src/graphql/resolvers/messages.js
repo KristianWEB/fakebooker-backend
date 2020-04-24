@@ -1,6 +1,5 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 const Message = require("../../models/Message");
-const Thread = require("../../models/Thread");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
 const pubsub = new PubSub();

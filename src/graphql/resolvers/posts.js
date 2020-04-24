@@ -1,8 +1,10 @@
-const { AuthenticationError } = require("apollo-server");
+const { AuthenticationError, PubSub } = require("apollo-server");
 
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 const getAuthenticatedUser = require("../middlewares/authenticated");
+
+const pubsub = new PubSub();
 
 module.exports = {
   Query: {
@@ -21,9 +23,6 @@ module.exports = {
               model: "User",
               select: "firstName lastName avatarImage",
             },
-          })
-          .sort({
-            creationDate: -1,
           });
         return posts;
       } catch (err) {
@@ -45,9 +44,6 @@ module.exports = {
               model: "User",
               select: "firstName lastName avatarImage",
             },
-          })
-          .sort({
-            creationDate: -1,
           });
         return posts;
       } catch (err) {
@@ -72,6 +68,10 @@ module.exports = {
         .then(t =>
           t.populate("userId", "firstName lastName avatarImage").execPopulate()
         );
+      pubsub.publish("NEW_POST", {
+        newPost: post,
+      });
+
       return post;
     },
     deletePost: async (_, { postId }, context) => {
@@ -87,6 +87,11 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
+    },
+  },
+  Subscription: {
+    newPost: {
+      subscribe: () => pubsub.asyncIterator("NEW_POST"),
     },
   },
 };
