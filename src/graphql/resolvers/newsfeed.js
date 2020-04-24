@@ -1,7 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
-
 const Post = require("../../models/Post");
-const User = require("../../models/User");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
 module.exports = {
