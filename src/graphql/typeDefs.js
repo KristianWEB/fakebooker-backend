@@ -113,6 +113,7 @@ module.exports = gql`
     getMessages: [Message]
     getSingleChat(threadId: String): [Message]
     getThread(urlUser: String): Thread
+    getNewsfeed: [Post]
   }
 
   type Mutation {
@@ -148,5 +149,6 @@ module.exports = gql`
     newNotification: Notification!
     deleteNotification: String!
     newMessage: Message!
+    newPost: Post!
   }
 `;
