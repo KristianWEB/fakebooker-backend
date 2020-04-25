@@ -23,7 +23,8 @@ module.exports = {
               model: "User",
               select: "firstName lastName avatarImage",
             },
-          });
+          })
+          .sort("-createdAt");
         return posts;
       } catch (err) {
         throw new Error(err);

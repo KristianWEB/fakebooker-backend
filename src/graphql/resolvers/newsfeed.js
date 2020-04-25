@@ -24,7 +24,7 @@ module.exports = {
               select: "firstName lastName avatarImage",
             },
           })
-          .sort("createdAt");
+          .sort("-createdAt");
         return posts;
       } catch (err) {
         throw new Error(err);

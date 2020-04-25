@@ -15,6 +15,7 @@ module.exports = {
 
       // TODO: to make messages notification right => fetch all threads => fetch latestmessage of the thread ( creator/notifier authUser ) and save it into array
       // THIS CURRENTLY DOESNT WORK
+      // const threads = await Thread.find({});
       // const conversation = await Promise.all(
       //   threads.map(async thread => {
       //     // for each thread we find the latest message and s
