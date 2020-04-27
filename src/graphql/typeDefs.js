@@ -108,7 +108,7 @@ module.exports = gql`
     getUrlPosts(username: String!): [Post]
     getPosts: [Post]
     getNotifications: [Notification]
-    getSingleNotification(creator: String!, notifier: String!): Notification
+    getSingleNotification(urlUser: String!): Notification
     getMessages: [Message]
     getSingleChat(threadId: String): [Message]
     getThread(urlUser: String): Thread

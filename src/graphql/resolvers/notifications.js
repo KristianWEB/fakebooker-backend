@@ -22,17 +22,26 @@ module.exports = {
 
       return notifications;
     },
-    getSingleNotification: async (_, { creator, notifier }, context) => {
-      const { user } = await getAuthenticatedUser({ context });
+    getSingleNotification: async (_, { urlUser }, context) => {
+      const { user: authUser } = await getAuthenticatedUser({ context });
 
-      if (!user) {
+      if (!authUser) {
         throw new AuthenticationError("Unauthenticated!");
       }
 
       const notification = await Notification.findOne({
-        notifier,
-        creator,
-        action: "Sent you a friend request",
+        $or: [
+          {
+            notifier: authUser.id,
+            creator: urlUser,
+            action: "Sent you a friend request",
+          },
+          {
+            notifier: urlUser,
+            creator: authUser.id,
+            action: "Sent you a friend request",
+          },
+        ],
       })
         .populate("creator", "firstName lastName avatarImage")
         .populate("notifier", "firstName lastName avatarImage");
