@@ -13,7 +13,10 @@ const generateToken = require("../../util/generateToken");
 module.exports = {
   Query: {
     loadUser: async (_, __, context) => {
-      const { user, token } = await getAuthenticatedUser({ context });
+      const { user, token } = await getAuthenticatedUser({
+        context,
+        newToken: true,
+      });
 
       if (!user) {
         throw new Error("Unauthenticated!");
@@ -21,22 +24,9 @@ module.exports = {
 
       return {
         token,
-        ...user,
+        ...user._doc,
+        id: user._id,
       };
-    },
-    loadUserFromDB: async (_, __, context) => {
-      const { user: authUser } = await getAuthenticatedUser({ context });
-
-      if (!authUser) {
-        throw new Error("Unauthenticated!");
-      }
-
-      const user = await User.findById(authUser.id).populate(
-        "friends",
-        "firstName lastName avatarImage username"
-      );
-
-      return user;
     },
     loadFromUrlUser: async (_, { username }) => {
       const user = await User.findOne({ username }).populate(

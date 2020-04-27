@@ -17,7 +17,10 @@ module.exports = async ({ context, newToken }) => {
     }
   }
   if (newToken) {
-    const newUser = await User.findById(user.id);
+    const newUser = await User.findById(user.id).populate(
+      "friends",
+      "firstName lastName avatarImage id username"
+    );
 
     token = generateToken(newUser);
     user = newUser;

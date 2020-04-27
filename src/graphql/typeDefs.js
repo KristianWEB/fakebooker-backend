@@ -103,8 +103,7 @@ module.exports = gql`
   }
   type Query {
     hello: String!
-    loadUser: User
-    loadUserFromDB: User
+    loadUser: User!
     loadFromUrlUser(username: String!): User
     getUrlPosts(username: String!): [Post]
     getPosts: [Post]
