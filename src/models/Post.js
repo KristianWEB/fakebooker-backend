@@ -8,7 +8,7 @@ const PostSchema = new Schema({
   },
   body: { type: String },
   image: { type: String },
-  createdAt: { type: Number, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment", default: [] }],
   likes: [{ type: Schema.Types.ObjectId, ref: "Like", default: [] }],
 });

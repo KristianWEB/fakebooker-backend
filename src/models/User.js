@@ -19,7 +19,7 @@ const UserSchema = new Schema({
     type: String,
   },
   gender: { required: true, type: String },
-  birthday: { type: Number },
+  birthday: { type: Date },
   password: { required: true, type: String },
   workPlace: { type: String },
   homePlace: { type: String },

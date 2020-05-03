@@ -3,7 +3,6 @@ const usersResolvers = require("./users");
 const postsResolvers = require("./posts");
 const commentsResolvers = require("./comments");
 const likesResolvers = require("./likes");
-const dateResolvers = require("./date");
 const notificationsResolvers = require("./notifications");
 const aboutResolvers = require("./about");
 const imageResolvers = require("./images");
@@ -37,9 +36,6 @@ module.exports = {
     ...friendsResolvers.Mutation,
     ...messagesResolvers.Mutation,
     ...threadsResolvers.Mutation,
-  },
-  Date: {
-    ...dateResolvers.Date,
   },
   Subscription: {
     ...notificationsResolvers.Subscription,

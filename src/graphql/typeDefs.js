@@ -1,15 +1,13 @@
 const { gql } = require("apollo-server");
 
 module.exports = gql`
-  scalar Date
-
   type User {
     id: ID!
     firstName: String!
     lastName: String!
     email: String!
     gender: String
-    birthday: Date
+    birthday: String
     avatarImage: String
     coverImage: String
     token: String
@@ -24,7 +22,7 @@ module.exports = gql`
     firstName: String!
     lastName: String!
     email: String!
-    birthday: Date!
+    birthday: String!
     gender: String!
     password: String!
   }
@@ -47,7 +45,7 @@ module.exports = gql`
     notifier: UserValue!
     action: String!
     actionId: NotificationAction
-    createdAt: Date!
+    createdAt: String!
     status: String
   }
 
@@ -56,7 +54,7 @@ module.exports = gql`
     creator: UserValue!
     notifier: UserValue!
     body: String!
-    createdAt: Date!
+    createdAt: String!
     threadId: String!
   }
 
@@ -131,7 +129,7 @@ module.exports = gql`
     deleteSchool: User!
     addGender(gender: String!): User!
     deleteGender: User!
-    addBirthday(birthday: Date!): User!
+    addBirthday(birthday: String!): User!
     deleteBirthday: User!
     addHomeplace(homePlace: String!): User!
     deleteHomeplace: User!

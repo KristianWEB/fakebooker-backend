@@ -11,7 +11,7 @@ const LikeSchema = new Schema({
     required: true,
     ref: "Post",
   },
-  createdAt: { type: Number, default: Date.now() },
+  createdAt: { type: Number, default: Date.now },
 });
 
 const Like = model("Like", LikeSchema);
