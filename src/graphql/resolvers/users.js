@@ -1,10 +1,6 @@
 const { UserInputError } = require("apollo-server");
 const bcrypt = require("bcryptjs");
 const User = require("../../models/User");
-const {
-  // validateRegisterInput,
-  validateLoginInput,
-} = require("../../util/validators");
 
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
@@ -38,23 +34,16 @@ module.exports = {
   },
   Mutation: {
     login: async (_, { email, password }) => {
-      const { errors, valid } = validateLoginInput(email, password);
-
-      if (!valid) {
-        throw new UserInputError("Errors", { errors });
-      }
-
       const user = await User.findByEmail(email);
 
       if (!user) {
-        errors.general = "User not found";
-        throw new UserInputError("User not found", { errors });
+        throw new UserInputError("Wrong email or password");
       }
 
       const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        errors.general = "Wrong crendetials";
-        throw new UserInputError("Wrong crendetials", { errors });
+
+      if (!match || email !== user.email) {
+        throw new UserInputError("Wrong email or password");
       }
 
       const token = generateToken(user);
@@ -78,19 +67,6 @@ module.exports = {
         },
       }
     ) => {
-      // const { valid, errors } = validateRegisterInput(
-      //   firstName,
-      //   lastName,
-      //   email,
-      //   birthday,
-      //   gender,
-      //   password
-      // );
-
-      // if (!valid) {
-      //   throw new UserInputError("Errors", { errors });
-      // }
-
       const user = await User.findByEmail(email);
       if (user) {
         throw new UserInputError("Email is taken", {
