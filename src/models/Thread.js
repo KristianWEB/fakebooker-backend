@@ -8,7 +8,7 @@ const ThreadSchema = new Schema({
       required: true,
     },
   ],
-  createdAt: { type: Number, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Thread = model("Thread", ThreadSchema);

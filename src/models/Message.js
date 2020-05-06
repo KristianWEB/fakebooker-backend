@@ -20,7 +20,7 @@ const MessageSchema = new Schema({
     required: true,
     ref: "Thread",
   },
-  createdAt: { type: Number, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Message = model("Message", MessageSchema);

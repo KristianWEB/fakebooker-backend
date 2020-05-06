@@ -12,7 +12,7 @@ const CommentSchema = new Schema({
     ref: "Post",
   },
   body: String,
-  createdAt: { type: Number, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Comment = model("Comment", CommentSchema);

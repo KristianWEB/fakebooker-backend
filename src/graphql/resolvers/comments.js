@@ -10,10 +10,6 @@ module.exports = {
       if (!user) {
         throw new Error("Unauthenticated!");
       }
-
-      if (body.trim() === "") {
-        throw new Error("Comment can't be empty!");
-      }
       const post = await Post.findOne({ _id: postId });
       if (post) {
         const newComment = new Comment({

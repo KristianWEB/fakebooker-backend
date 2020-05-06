@@ -13,7 +13,7 @@ const NotificationSchema = new Schema({
   },
   action: { type: String, required: true },
   actionId: { type: Schema.Types.ObjectId, ref: "Post" },
-  createdAt: { type: Number, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
   status: {
     type: String,
   },

@@ -5,7 +5,7 @@ const User = require("../../models/User");
 
 const secret = props.JWT_SECRET;
 
-module.exports = async ({ context, newToken }) => {
+module.exports = async ({ context, newToken, dontPopulate }) => {
   const authHeader = context.req.headers.authorization;
   let user = null;
   let token = null;
@@ -22,6 +22,11 @@ module.exports = async ({ context, newToken }) => {
       "firstName lastName avatarImage id username"
     );
 
+    token = generateToken(newUser);
+    user = newUser;
+  }
+  if (newToken && dontPopulate) {
+    const newUser = await User.findById(user.id);
     token = generateToken(newUser);
     user = newUser;
   }

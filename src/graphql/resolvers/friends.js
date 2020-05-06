@@ -25,7 +25,10 @@ module.exports = {
       return notification;
     },
     acceptFriend: async (_, { creator }, context) => {
-      const { user: notifierUser } = await getAuthenticatedUser({ context });
+      const { user: notifierUser } = await getAuthenticatedUser({
+        context,
+        newToken: true,
+      });
 
       if (!notifierUser) {
         throw new AuthenticationError("Unauthenticated!");
@@ -39,7 +42,7 @@ module.exports = {
           _id: notifierUser.id,
         },
         {
-          friends: [creatorUser.id],
+          friends: [creatorUser.id, ...notifierUser.friends],
         },
         {
           new: true,
@@ -52,7 +55,7 @@ module.exports = {
           _id: creatorUser.id,
         },
         {
-          friends: [notifierUser.id],
+          friends: [notifierUser.id, ...creatorUser.friends],
         },
         {
           new: true,
@@ -105,6 +108,7 @@ module.exports = {
       const { user: userA } = await getAuthenticatedUser({
         context,
         newToken: true,
+        dontPopulate: true,
       });
 
       if (!userA) {
@@ -134,7 +138,7 @@ module.exports = {
 
       await User.findOneAndUpdate(
         { _id: userA.id },
-        { $unset: { friends: newFriendsArrUserA } },
+        { $set: { friends: newFriendsArrUserA } },
         { new: true }
       );
 
@@ -145,11 +149,14 @@ module.exports = {
 
       await User.findOneAndUpdate(
         { _id: userB.id },
-        { $unset: { friends: newFriendsArrUserB } },
+        { $set: { friends: newFriendsArrUserB } },
         { new: true }
       );
 
-      const newUser = await User.findById(userA);
+      const newUser = await User.findById(userA.id).populate(
+        "friends",
+        "firstName lastName avatarImage id username"
+      );
 
       return newUser;
     },
