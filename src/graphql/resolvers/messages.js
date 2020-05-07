@@ -1,4 +1,4 @@
-const { AuthenticationError, PubSub } = require("apollo-server");
+const { AuthenticationError, PubSub, withFilter } = require("apollo-server");
 const Message = require("../../models/Message");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
@@ -88,6 +88,7 @@ module.exports = {
 
       pubsub.publish("NEW_MESSAGE", {
         newMessage: message,
+        notifierId: notifier,
       });
 
       return message;
@@ -95,7 +96,15 @@ module.exports = {
   },
   Subscription: {
     newMessage: {
-      subscribe: () => pubsub.asyncIterator("NEW_MESSAGE"),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator("NEW_MESSAGE"),
+        (payload, variables) => {
+          return (
+            payload.newMessage.notifier.id.toString() ===
+            variables.notifierId.toString()
+          );
+        }
+      ),
     },
   },
 };
