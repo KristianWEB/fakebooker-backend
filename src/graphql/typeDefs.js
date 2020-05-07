@@ -145,7 +145,7 @@ module.exports = gql`
   type Subscription {
     newNotification: Notification!
     deleteNotification: String!
-    newMessage: Message!
+    newMessage(notifierId: String!): Message
     newPost: Post!
   }
 `;
