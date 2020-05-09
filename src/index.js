@@ -1,10 +1,10 @@
+require("dotenv").config();
 const { ApolloServer } = require("apollo-server");
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers/index");
-const props = require("./config/properties");
 const connectDB = require("./config/database");
 
-const port = props.PORT;
+const port = process.env.PORT || 8080;
 // Connect Database
 connectDB();
 

@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const props = require("./properties");
 
 require("dotenv").config();
 
-const db = process.env.DB_URL || props.DB_URL;
+const db = process.env.DB_URL || "mongodb://localhost:27017/fakebooker";
 
 const connectDB = async () => {
   try {

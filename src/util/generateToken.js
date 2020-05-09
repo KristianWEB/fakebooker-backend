@@ -1,5 +1,5 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const props = require("../config/properties");
 
 module.exports = user => {
   return jwt.sign(
@@ -16,7 +16,7 @@ module.exports = user => {
       username: user.username,
       workPlace: user.workPlace,
     },
-    props.JWT_SECRET,
+    process.env.JWT_SECRET || 8080,
     {
       expiresIn: 604800,
     }
