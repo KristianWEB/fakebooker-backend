@@ -16,7 +16,7 @@ module.exports = user => {
       username: user.username,
       workPlace: user.workPlace,
     },
-    process.env.JWT_SECRET || 8080,
+    process.env.JWT_SECRET || "YOURSECRET",
     {
       expiresIn: 604800,
     }
