@@ -1,5 +1,4 @@
 const { AuthenticationError } = require("apollo-server");
-const mongoose = require("mongoose");
 const Thread = require("../../models/Thread");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
