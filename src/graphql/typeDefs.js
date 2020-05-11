@@ -100,13 +100,22 @@ module.exports = gql`
     createdAt: String!
   }
 
+  type ConversationUser {
+    _id: ID
+    firstName: String
+    lastName: String
+    avatarImage: String
+    username: String
+  }
+
   type LatestMessage {
     _id: ID!
-    creator: UserValue!
-    notifier: UserValue!
+    creator: ConversationUser!
+    notifier: ConversationUser!
     createdAt: String!
     body: String!
   }
+
   type Conversation {
     _id: ID!
     participantsIds: [ID]!

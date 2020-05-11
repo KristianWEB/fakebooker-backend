@@ -1,4 +1,5 @@
 const { AuthenticationError } = require("apollo-server");
+const mongoose = require("mongoose");
 const Thread = require("../../models/Thread");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
@@ -11,18 +12,24 @@ module.exports = {
         throw new AuthenticationError("Unauthenticated!");
       }
 
-      const thread = await Thread.findOne({
-        $or: [
-          {
-            participantsIds: [authUser.id, urlUser],
+      // aggregate always returns an array that's why im returning the first element [0]. Only 1 thread can exist between 2 users that's why it's not a problem.
+      const thread = await Thread.aggregate([
+        {
+          $match: {
+            participantsIds: {
+              $in: [
+                mongoose.Types.ObjectId(authUser.id),
+                mongoose.Types.ObjectId(urlUser),
+              ],
+            },
           },
-          {
-            participantsIds: [urlUser, authUser.id],
-          },
-        ],
-      });
+        },
+      ]);
 
-      return thread;
+      return {
+        ...thread[0],
+        id: thread[0]._id,
+      };
     },
   },
   Mutation: {
