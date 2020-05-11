@@ -34,20 +34,22 @@ const CREATE_THREAD = gql`
   }
 `;
 
-const GET_MESSAGES = gql`
+const GET_CONVERSATIONS = gql`
   {
-    getMessages {
-      creator {
-        firstName
-        lastName
-        avatarImage
+    getConversations {
+      latestMessage {
+        creator {
+          firstName
+          lastName
+          avatarImage
+        }
+        notifier {
+          firstName
+          lastName
+          avatarImage
+        }
+        body
       }
-      notifier {
-        firstName
-        lastName
-        avatarImage
-      }
-      body
     }
   }
 `;
@@ -123,11 +125,11 @@ describe("Chat system integration testing", () => {
     // get messages for the notifier ( in this case authenticated user: User B) and assert that there is a new message from user B
     const tokenB = generateToken(userB);
 
-    const messages = await query({
-      mutation: GET_MESSAGES,
+    const conversations = await query({
+      mutation: GET_CONVERSATIONS,
       ctxArg: { req: { headers: { authorization: `JWT ${tokenB}` } } },
     });
-    expect(messages).toMatchSnapshot();
+    expect(conversations).toMatchSnapshot();
   });
 
   // Subscriptions cannot be tested as apollo-server-testing is not allowing it yet.
