@@ -12,24 +12,18 @@ module.exports = {
         throw new AuthenticationError("Unauthenticated!");
       }
 
-      // aggregate always returns an array that's why im returning the first element [0]. Only 1 thread can exist between 2 users that's why it's not a problem.
-      const thread = await Thread.aggregate([
-        {
-          $match: {
-            participantsIds: {
-              $in: [
-                mongoose.Types.ObjectId(authUser.id),
-                mongoose.Types.ObjectId(urlUser),
-              ],
-            },
+      const thread = await Thread.findOne({
+        $or: [
+          {
+            participantsIds: [authUser.id, urlUser],
           },
-        },
-      ]);
+          {
+            participantsIds: [urlUser, authUser.id],
+          },
+        ],
+      });
 
-      return {
-        ...thread[0],
-        id: thread[0]._id,
-      };
+      return thread;
     },
   },
   Mutation: {
