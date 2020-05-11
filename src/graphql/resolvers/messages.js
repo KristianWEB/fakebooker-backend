@@ -1,49 +1,78 @@
 const { AuthenticationError, PubSub, withFilter } = require("apollo-server");
+const mongoose = require("mongoose");
 const Message = require("../../models/Message");
+const Thread = require("../../models/Thread");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
 const pubsub = new PubSub();
 
 module.exports = {
   Query: {
-    getMessages: async (_, __, context) => {
+    getConversations: async (_, __, context) => {
       const { user: authUser } = await getAuthenticatedUser({ context });
 
       if (!authUser) {
         throw new AuthenticationError("Unauthenticated!");
       }
 
-      // TODO: to make messages notification right => fetch all threads => fetch latestmessage of the thread ( creator/notifier authUser ) and save it into array
-      // THIS CURRENTLY DOESNT WORK
-      // const threads = await Thread.find({});
-      // const conversation = await Promise.all(
-      //   threads.map(async thread => {
-      //     // for each thread we find the latest message and s
-      //     const message = await Message.findOne({
-      //       $or: [
-      //         {
-      //           threadId: thread.id,
-      //           creator: authUser.id,
-      //         },
-      //         {
-      //           threadId: thread.id,
-      //           notifier: authUser.id,
-      //         },
-      //       ],
-      //     })
-      //       .sort("-createdAt")
-      //       .populate("creator", "firstName lastName avatarImage")
-      //       .populate("notifier", "firstName lastName avatarImage");
-      // })
-      // );
+      // https://stackoverflow.com/a/41376967/11017666
+      const conversations = await Thread.aggregate([
+        {
+          $match: {
+            participantsIds: {
+              $in: [mongoose.Types.ObjectId(authUser.id)],
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "messages",
+            localField: "_id",
+            foreignField: "threadId",
+            as: "messages",
+          },
+        },
+        {
+          $unwind: "$messages",
+        },
+        {
+          $sort: {
+            "messages.createdAt": -1,
+          },
+        },
+        {
+          $group: {
+            _id: "$_id",
+            participantsIds: { $first: "$participantsIds" },
+            latestMessage: { $first: "$messages" },
+          },
+        },
+        // once we structure all converasations with latest messages, populate each message's creator and notifier
+        {
+          $lookup: {
+            from: "users",
+            localField: "latestMessage.creator",
+            foreignField: "_id",
+            as: "latestMessage.creator",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "latestMessage.notifier",
+            foreignField: "_id",
+            as: "latestMessage.notifier",
+          },
+        },
+        {
+          $unwind: "$latestMessage.creator",
+        },
+        {
+          $unwind: "$latestMessage.notifier",
+        },
+      ]);
 
-      const messages = await Message.find({
-        notifier: authUser.id,
-      })
-        .populate("creator", "firstName lastName avatarImage")
-        .populate("notifier", "firstName lastName avatarImage");
-
-      return messages;
+      return conversations;
     },
     getSingleChat: async (_, { threadId }, context) => {
       const { user: authUser } = await getAuthenticatedUser({ context });

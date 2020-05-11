@@ -99,6 +99,21 @@ module.exports = gql`
     body: String!
     createdAt: String!
   }
+
+  type LatestMessage {
+    _id: ID!
+    creator: UserValue!
+    notifier: UserValue!
+    createdAt: String!
+    body: String!
+  }
+  type Conversation {
+    _id: ID!
+    participantsIds: [ID]!
+    latestMessage: LatestMessage!
+    createdAt: String!
+  }
+
   type Query {
     hello: String!
     loadUser: User!
@@ -107,7 +122,7 @@ module.exports = gql`
     getPosts: [Post]
     getNotifications: [Notification]
     getSingleNotification(urlUser: String!): Notification
-    getMessages: [Message]
+    getConversations: [Conversation]
     getSingleChat(threadId: String): [Message]
     getThread(urlUser: String): Thread
     getNewsfeed: [Post]
