@@ -36,6 +36,7 @@ module.exports = gql`
   }
 
   type NotificationAction {
+    id: ID!
     body: String!
   }
 
@@ -129,6 +130,7 @@ module.exports = gql`
     loadFromUrlUser(username: String!): User
     getUrlPosts(username: String!): [Post]
     getPosts: [Post]
+    getSinglePost(postId: String!): Post!
     getNotifications: [Notification]
     getSingleNotification(urlUser: String!): Notification
     getConversations: [Conversation]

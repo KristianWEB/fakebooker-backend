@@ -16,9 +16,9 @@ module.exports = {
       const notifications = await Notification.find({
         notifier: user.id,
       })
-        .populate("creator", "firstName lastName avatarImage")
-        .populate("notifier", "firstName lastName avatarImage")
-        .populate("actionId", "body");
+        .populate("creator", "firstName lastName avatarImage username")
+        .populate("notifier", "firstName lastName avatarImage username")
+        .populate("actionId", "body id");
 
       return notifications;
     },
@@ -43,8 +43,8 @@ module.exports = {
           },
         ],
       })
-        .populate("creator", "firstName lastName avatarImage")
-        .populate("notifier", "firstName lastName avatarImage");
+        .populate("creator", "firstName lastName avatarImage username")
+        .populate("notifier", "firstName lastName avatarImage username");
 
       return notification;
     },
@@ -65,13 +65,15 @@ module.exports = {
         status,
       })
         .save()
-        .then(t => t.populate("actionId", "body").execPopulate())
+        .then(t => t.populate("actionId", "body id").execPopulate())
         .then(t =>
-          t.populate("creator", "firstName lastName avatarImage").execPopulate()
+          t
+            .populate("creator", "firstName lastName avatarImage username")
+            .execPopulate()
         )
         .then(t =>
           t
-            .populate("notifier", "firstName lastName avatarImage")
+            .populate("notifier", "firstName lastName avatarImage username")
             .execPopulate()
         );
 

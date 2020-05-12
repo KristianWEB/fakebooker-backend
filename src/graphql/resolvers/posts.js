@@ -30,6 +30,32 @@ module.exports = {
         throw new Error(err);
       }
     },
+    getSinglePost: async (_, { postId }, context) => {
+      try {
+        const { user } = await getAuthenticatedUser({ context });
+
+        if (!user) {
+          throw new AuthenticationError("Unauthenticated!");
+        }
+
+        const post = await Post.findById(postId)
+          .populate("userId", "firstName lastName avatarImage")
+          .populate("likes", "userId postId createdAt")
+          .populate("comments", "userId postId createdAt body")
+          .populate({
+            path: "comments",
+            populate: {
+              path: "userId",
+              model: "User",
+              select: "firstName lastName avatarImage",
+            },
+          })
+          .sort("-createdAt");
+        return post;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     getUrlPosts: async (_, { username }) => {
       try {
         const user = await User.findOne({ username });
