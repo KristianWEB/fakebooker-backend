@@ -1,9 +1,8 @@
-const { UserInputError } = require("apollo-server");
+const { UserInputError, AuthenticationError } = require("apollo-server");
 const bcrypt = require("bcryptjs");
 const User = require("../../models/User");
 
 const getAuthenticatedUser = require("../middlewares/authenticated");
-
 const generateToken = require("../../util/generateToken");
 
 module.exports = {
@@ -13,7 +12,6 @@ module.exports = {
         context,
         newToken: true,
       });
-
       if (!user) {
         throw new Error("Unauthenticated!");
       }
@@ -24,12 +22,29 @@ module.exports = {
         id: user._id,
       };
     },
-    loadFromUrlUser: async (_, { username }) => {
+    loadFromUrlUser: async (_, { username }, context) => {
+      const { user: authUser } = await getAuthenticatedUser({ context });
+
+      if (!authUser) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
       const user = await User.findOne({ username }).populate(
         "friends",
         "id firstName lastName avatarImage username"
       );
       return user;
+    },
+    getUsers: async (_, __, context) => {
+      const { user } = await getAuthenticatedUser({ context });
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const users = await User.find({});
+
+      return users;
     },
   },
   Mutation: {
