@@ -130,6 +130,7 @@ module.exports = gql`
     loadFromUrlUser(username: String!): User
     getUrlPosts(username: String!): [Post]
     getPosts: [Post]
+    getUsers: [UserValue]
     getSinglePost(postId: String!): Post!
     getNotifications: [Notification]
     getSingleNotification(urlUser: String!): Notification
