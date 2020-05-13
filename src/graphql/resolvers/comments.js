@@ -45,23 +45,26 @@ module.exports = {
     deleteComment: async (_, { postId, commentId }, context) => {
       const { user } = await getAuthenticatedUser({ context });
 
-      const post = await Post.findOne({ _id: postId });
+      const post = await Post.findById(postId).populate("userId", "id");
 
       if (post) {
         const comment = await Comment.findById(commentId).populate(
           "userId",
-          "_id firstName lastName avatarImage"
+          "id firstName lastName avatarImage"
         );
 
-        if (comment.userId._id.toString() === user.id) {
+        if (
+          comment.userId.id.toString() === user.id ||
+          post.userId.id.toString() === user.id
+        ) {
           post.comments.splice(comment, 1);
 
           await Comment.find({ userId: user.id }).deleteOne();
 
-          if (user.id !== post.userId.toString()) {
+          if (user.id !== post.userId.id.toString()) {
             await notifications.Mutation.deleteNotification({
               creator: user.id,
-              actionId: post._id,
+              actionId: post.id,
             });
           }
 

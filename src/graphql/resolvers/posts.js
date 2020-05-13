@@ -1,6 +1,8 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 
 const Post = require("../../models/Post");
+const Like = require("../../models/Like");
+const Comment = require("../../models/Comment");
 const User = require("../../models/User");
 const getAuthenticatedUser = require("../middlewares/authenticated");
 
@@ -108,6 +110,14 @@ module.exports = {
       try {
         const post = await Post.findById(postId);
         if (user.id === post.userId.toString()) {
+          await Like.find({
+            postId: post.id,
+          }).deleteMany();
+
+          await Comment.find({
+            postId: post.id,
+          }).deleteMany();
+
           await post.delete();
           return "Post deleted successfully";
         }
