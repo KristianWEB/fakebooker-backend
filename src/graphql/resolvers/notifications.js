@@ -18,7 +18,8 @@ module.exports = {
       })
         .populate("creator", "firstName lastName avatarImage username")
         .populate("notifier", "firstName lastName avatarImage username")
-        .populate("actionId", "body id");
+        .populate("actionId", "body id")
+        .sort("-createdAt");
 
       return notifications;
     },
