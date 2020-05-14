@@ -11,6 +11,7 @@ const PostSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment", default: [] }],
   likes: [{ type: Schema.Types.ObjectId, ref: "Like", default: [] }],
+  shares: [{ type: Schema.Types.ObjectId, ref: "Share", default: [] }],
 });
 
 const Post = model("Post", PostSchema);

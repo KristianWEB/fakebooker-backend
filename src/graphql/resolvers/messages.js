@@ -47,7 +47,7 @@ module.exports = {
             latestMessage: { $first: "$messages" },
           },
         },
-        // once we structure all converasations with latest messages, populate each message's creator and notifier
+        // once we structure all conversations with latest messages, populate each message's creator and notifier
         {
           $lookup: {
             from: "users",

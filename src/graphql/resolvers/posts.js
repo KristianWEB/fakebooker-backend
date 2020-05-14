@@ -1,6 +1,8 @@
 const { AuthenticationError, PubSub } = require("apollo-server");
 
+const mongoose = require("mongoose");
 const Post = require("../../models/Post");
+const Share = require("../../models/Share");
 const Like = require("../../models/Like");
 const Comment = require("../../models/Comment");
 const User = require("../../models/User");
@@ -14,20 +16,103 @@ module.exports = {
       try {
         const { user } = await getAuthenticatedUser({ context });
 
-        const posts = await Post.find({ userId: user.id })
-          .populate("userId", "firstName lastName avatarImage")
-          .populate("likes", "userId postId createdAt")
-          .populate("comments", "userId postId createdAt body")
-          .populate({
-            path: "comments",
-            populate: {
-              path: "userId",
-              model: "User",
-              select: "firstName lastName avatarImage",
+        // const posts = await Post.find({ userId: user.id })
+        //   .populate("userId", "firstName lastName avatarImage")
+        //   .populate("likes", "userId postId createdAt")
+        //   .populate("comments", "userId postId createdAt body")
+        //   .populate({
+        //     path: "comments",
+        //     populate: {
+        //       path: "userId",
+        //       model: "User",
+        //       select: "firstName lastName avatarImage",
+        //     },
+        //   })
+        //   .sort("-createdAt");
+
+        // TODO: find all shared posts by user ( find )
+        // TODO: READ THIS AGAIN https://stackoverflow.com/a/36023726/11017666
+        const share = await Share.findOne({
+          userId: user.id,
+        });
+
+        const sharedPosts = await Post.aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  $or: [
+                    {
+                      shares: {
+                        $in: [mongoose.Types.ObjectId(share.id)],
+                      },
+                    },
+                    {
+                      userId: mongoose.Types.ObjectId(user.id),
+                    },
+                  ],
+                },
+              ],
             },
-          })
-          .sort("-createdAt");
-        return posts;
+          },
+          {
+            $sort: {
+              "posts.createdAt": -1,
+            },
+          },
+          {
+            $lookup: {
+              from: "shares",
+              localField: "shares",
+              foreignField: "_id",
+              as: "shares",
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "userId",
+              foreignField: "_id",
+              as: "userId",
+            },
+          },
+          {
+            $lookup: {
+              from: "likes",
+              localField: "likes",
+              foreignField: "_id",
+              as: "likes",
+            },
+          },
+          {
+            $lookup: {
+              from: "comments",
+              localField: "comments",
+              foreignField: "_id",
+              as: "comments",
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "comments.userId",
+              foreignField: "_id",
+              as: "comments.userId",
+            },
+          },
+          // {
+          //   $group: {
+          //     _id: "$_id",
+          //     comments: { $push: "$comments" },
+          // userId: "$userId",
+          // createdAt: "$createdAt",
+          // body: "$body",
+          // image: "$image",
+          // },
+          // },
+        ]);
+
+        return sharedPosts;
       } catch (err) {
         throw new Error(err);
       }
@@ -125,6 +210,29 @@ module.exports = {
       } catch (err) {
         throw new Error(err);
       }
+    },
+    sharePost: async (_, { postId }, context) => {
+      const { user } = await getAuthenticatedUser({ context });
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const post = await Post.findById(postId);
+
+      const share = await new Share({
+        postId: post.id,
+        userId: user.id,
+      }).save();
+
+      post.shares.push(share.id);
+
+      await post
+        .save()
+        .then(t =>
+          t.populate("shares", "userId postId createdAt").execPopulate()
+        );
+
+      return post;
     },
   },
   Subscription: {

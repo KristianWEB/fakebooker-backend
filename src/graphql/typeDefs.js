@@ -63,6 +63,12 @@ module.exports = gql`
     id: ID!
   }
 
+  type Share {
+    userId: ID!
+    postId: ID!
+    createdAt: String!
+  }
+
   type Post {
     id: ID!
     userId: UserValue!
@@ -71,6 +77,7 @@ module.exports = gql`
     createdAt: String!
     comments: [Comment]!
     likes: [Like]!
+    shares: [Share]
   }
 
   type Comment {
@@ -146,6 +153,7 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     createPost(body: String, image: String): Post!
+    sharePost(postId: String!): Post!
     deletePost(postId: ID!): String!
     createComment(postId: ID!, body: String!): Comment!
     deleteComment(postId: ID!, commentId: ID!): Comment!
