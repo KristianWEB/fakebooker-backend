@@ -15,7 +15,7 @@ module.exports = {
         const { user } = await getAuthenticatedUser({ context });
 
         const posts = await Post.find({ userId: user.id })
-          .populate("userId", "firstName lastName avatarImage")
+          .populate("userId", "firstName lastName avatarImage username")
           .populate("likes", "userId postId createdAt")
           .populate("comments", "userId postId createdAt body")
           .populate({
@@ -23,7 +23,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage",
+              select: "firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
@@ -41,7 +41,7 @@ module.exports = {
         }
 
         const post = await Post.findById(postId)
-          .populate("userId", "firstName lastName avatarImage")
+          .populate("userId", "firstName lastName avatarImage username")
           .populate("likes", "userId postId createdAt")
           .populate("comments", "userId postId createdAt body")
           .populate({
@@ -49,7 +49,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage",
+              select: "firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
@@ -63,7 +63,7 @@ module.exports = {
         const user = await User.findOne({ username });
 
         const posts = await Post.find({ userId: user.id })
-          .populate("userId", "firstName lastName avatarImage")
+          .populate("userId", "firstName lastName avatarImage username")
           .populate("likes", "userId postId createdAt")
           .populate("comments", "userId postId createdAt body")
           .populate({
@@ -71,7 +71,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage",
+              select: "firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
@@ -96,7 +96,9 @@ module.exports = {
       const post = await newPost
         .save()
         .then(t =>
-          t.populate("userId", "firstName lastName avatarImage").execPopulate()
+          t
+            .populate("userId", "firstName lastName avatarImage username")
+            .execPopulate()
         );
       pubsub.publish("NEW_POST", {
         newPost: post,

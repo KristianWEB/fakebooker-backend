@@ -21,7 +21,7 @@ module.exports = {
           .save()
           .then(t =>
             t
-              .populate("userId", "firstName lastName avatarImage")
+              .populate("userId", "firstName lastName avatarImage username")
               .execPopulate()
           );
 
@@ -50,7 +50,7 @@ module.exports = {
       if (post) {
         const comment = await Comment.findById(commentId).populate(
           "userId",
-          "id firstName lastName avatarImage"
+          "id firstName lastName avatarImage username"
         );
 
         if (
