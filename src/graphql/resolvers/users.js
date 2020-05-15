@@ -109,5 +109,47 @@ module.exports = {
         token,
       };
     },
+    changeAvatarImage: async (_, { avatarImage }, context) => {
+      const { user } = await getAuthenticatedUser({ context });
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        {
+          _id: user.id,
+        },
+        {
+          avatarImage,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return newUser;
+    },
+    changeCoverImage: async (_, { coverImage }, context) => {
+      const { user } = await getAuthenticatedUser({ context });
+
+      if (!user) {
+        throw new AuthenticationError("Unauthenticated!");
+      }
+
+      const newUser = await User.findOneAndUpdate(
+        {
+          _id: user.id,
+        },
+        {
+          coverImage,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return newUser;
+    },
   },
 };

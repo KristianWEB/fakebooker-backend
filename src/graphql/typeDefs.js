@@ -151,6 +151,8 @@ module.exports = gql`
     deleteComment(postId: ID!, commentId: ID!): Comment!
     likePost(postId: ID!): Post
     addWorkplace(body: String!): User!
+    changeAvatarImage(avatarImage: String!): User!
+    changeCoverImage(coverImage: String!): User!
     deleteWorkplace: User!
     addSchool(body: String!): User!
     deleteSchool: User!

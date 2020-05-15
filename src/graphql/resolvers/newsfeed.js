@@ -13,7 +13,7 @@ module.exports = {
         }
 
         const posts = await Post.find({})
-          .populate("userId", "firstName lastName avatarImage")
+          .populate("userId", "firstName lastName avatarImage username")
           .populate("likes", "userId postId createdAt")
           .populate("comments", "userId postId createdAt body")
           .populate({
@@ -21,7 +21,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage",
+              select: "firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
