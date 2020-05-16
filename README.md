@@ -86,6 +86,7 @@ Fakebooker is an extensive open-source project that is essentially a clone of th
    
 ## Setup
 * Make sure you have mongodb installed
+* create from `.env.example` a `.env` file and fill in the example values with your actual values ( `you need to have a cloudinary account` )
  ```sh
  npm install && npm start
  ```
