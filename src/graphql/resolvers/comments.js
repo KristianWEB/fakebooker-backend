@@ -57,9 +57,10 @@ module.exports = {
           comment.userId.id.toString() === user.id ||
           post.userId.id.toString() === user.id
         ) {
-          post.comments.splice(comment, 1);
-
-          await Comment.find({ userId: user.id }).deleteOne();
+          post.comments = post.comments.filter(
+            cId => cId.toString() !== commentId
+          );
+          await Comment.findById(commentId).deleteOne();
 
           if (user.id !== post.userId.id.toString()) {
             await notifications.Mutation.deleteNotification({
