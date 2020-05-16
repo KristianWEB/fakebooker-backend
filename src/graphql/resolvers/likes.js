@@ -54,7 +54,7 @@ module.exports = {
           .save()
           .then(t =>
             t
-              .populate("userId", "firstName lastName avatarImage username")
+              .populate("userId", "id firstName lastName avatarImage username")
               .execPopulate()
           )
           .then(t =>

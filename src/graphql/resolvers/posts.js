@@ -23,7 +23,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage username",
+              select: "id firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
@@ -49,7 +49,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage username",
+              select: "id firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
@@ -71,7 +71,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage username",
+              select: "id firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
@@ -97,7 +97,7 @@ module.exports = {
         .save()
         .then(t =>
           t
-            .populate("userId", "firstName lastName avatarImage username")
+            .populate("userId", "id firstName lastName avatarImage username")
             .execPopulate()
         );
       pubsub.publish("NEW_POST", {

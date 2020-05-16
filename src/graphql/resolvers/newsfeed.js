@@ -21,7 +21,7 @@ module.exports = {
             populate: {
               path: "userId",
               model: "User",
-              select: "firstName lastName avatarImage username",
+              select: "id firstName lastName avatarImage username",
             },
           })
           .sort("-createdAt");
