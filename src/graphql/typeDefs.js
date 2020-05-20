@@ -65,7 +65,7 @@ module.exports = gql`
 
   type Post {
     id: ID!
-    userId: UserValue!
+    userId: UserValue
     body: String!
     image: String
     createdAt: String!
